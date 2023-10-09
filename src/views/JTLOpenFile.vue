@@ -1,7 +1,7 @@
 <template>
   <div class="row">
     <p>Open the JTL file</p>
-    <p>jtldata: {{ jtldata }}</p>
+
 
     <input class="btn btn-primary" type="file" @change="readFile($event)">
   </div>
