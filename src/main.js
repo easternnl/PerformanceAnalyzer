@@ -9,12 +9,11 @@ import 'nprogress/nprogress.css';
 import Plotly from 'plotly.js-dist'
 
 import Moment from 'moment'
-
-import Axios from 'Axios'
+// import axios from 'Axios'
 
 // import * as d3 from "d3v4";
-import * as d3 from "d3";
-//import * as d3 from "d3-array";
+import * as D3 from "d3";
+// import * as d3array from "d3-array";
 
 // import { count } as d3arr from "d3-array";
 
@@ -22,7 +21,7 @@ import * as fflate from 'fflate';
 
 import YAML from 'yaml'
 
-import { createApp, ref } from 'vue'
+import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 
@@ -34,9 +33,10 @@ app.config.globalProperties.$jtldata = 'init'
 app.config.globalProperties.$nprogress = nprogress; // Allow nprogress in all componenets this.$nprogress.function()
 app.config.globalProperties.$plotly = Plotly; // Allow Plotly in all componenets this.$plotly
 app.config.globalProperties.$moment = Moment; // use moment everywhere in the app
-app.config.globalProperties.$http = Axios; // Allow axios in all componenets this.$http
+// app.config.globalProperties.$http = axios; // Allow axios in all componenets this.$http
 // app.config.globalProperties.$streamhttp = streamhttp; // Allow streamhttp in all components this.$streamhttp
-app.config.globalProperties.$d3 = d3; // Allow d3 in all componenets this.$d3
+app.config.globalProperties.$d3 = D3; // Allow d3 in all componenets this.$d3
+// app.config.globalProperties.$d3array = d3array; // Allow d3 in all componenets this.$d3
 app.config.globalProperties.$fflate = fflate; // Allow fflate in all componenets this.$fflate
 app.config.globalProperties.$yaml = YAML; // Allow yaml in all componenets this.$yaml
 
