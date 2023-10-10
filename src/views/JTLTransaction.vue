@@ -2,41 +2,60 @@
 import GlobalVariables from "@/GlobalVariableHolder";
 import {all} from "axios";
 import PlotlyChart from "@/components/PlotlyChart.vue";
+import MyTable from "@/components/MyTable.vue";
 
 export default {
   name: "JTLTransaction",
-  components: {PlotlyChart},
+  components: {
+    MyTable,
+    PlotlyChart},
   computed: {
-    transaction: function () {
-      return this.$route.params.transaction
-    },
-    responsetimes: function() {
+    responsetimes: function () {
 
       var config = {responsive: true}
 
       var data = []
 
-      var reduceddata = this.$d3.rollup(GlobalVariables.variables.$jtldata.filter((item) => {
-        if (item["label"] == this.transaction) return item
-      }), (d, e) => {
-        return {
-          avg: this.$d3.mean(d, e => e.elapsed),
-          max: this.$d3.max(d, e => e.elapsed),
-          min: this.$d3.min(d, e => e.elapsed),
-          pct90: this.$d3.quantile(d, 0.90, e => e.elapsed),
-          pct95: this.$d3.quantile(d, 0.95, e => e.elapsed),
-          pct99: this.$d3.quantile(d, 0.99, e => e.elapsed),
-          count: this.$d3.count(d, e => e.elapsed),
-        } } , d => parseInt(d.timeStamp / 10000))
+      var reduceddata = this.$d3.rollup (GlobalVariables.variables.$jtldata.filter ((item) => {
+            if (item["label"] == this.transaction) return item
+          }),
+          (d,e) => {
+            return {
+              avg: this.$d3.mean (d,
+                  e => e.elapsed),
+              max: this.$d3.max (d,
+                  e => e.elapsed),
+              min: this.$d3.min (d,
+                  e => e.elapsed),
+              pct90: this.$d3.quantile (d,
+                  0.90,
+                  e => e.elapsed),
+              pct95: this.$d3.quantile (d,
+                  0.95,
+                  e => e.elapsed),
+              pct99: this.$d3.quantile (d,
+                  0.99,
+                  e => e.elapsed),
+              count: this.$d3.count (d,
+                  e => e.elapsed),
+            }
+          },
+          d => parseInt (d.timeStamp / 10000))
 
-      var labels = ["avg", "max", "min", "pct90", "pct95", "pct99"]
+      var labels = ["avg","max","min","pct90","pct95","pct99"]
 
-      var x = Array.from(reduceddata.keys()).map((item) => { return item * 10000})
+      var x = Array.from (reduceddata.keys ())
+          .map ((item) => {
+            return item * 10000
+          })
 
-      labels.forEach(function(label) {
+      labels.forEach (function (label) {
         // console.log(label)
 
-        var y = Array.from(reduceddata.values()).map((item) => { return item[label] / 1000})
+        var y = Array.from (reduceddata.values ())
+            .map ((item) => {
+              return item[label] / 1000
+            })
 
         var transactiondetails = {
           type: 'line',
@@ -44,26 +63,24 @@ export default {
           x: x,
           y: y,
           mode: 'markers',
-          hoverlabel:
-              {
-                namelength: -1,
-                align: 'auto'
-              },
-          visible: (['avg', 'min', 'max'].includes(label)  ? 'yes' : 'legendonly'),
+          hoverlabel: {
+            namelength: -1,
+            align: 'auto'
+          },
+          visible: (['avg','min','max'].includes (label) ? 'yes' : 'legendonly'),
           marker: {
             // color: '#456E88',
-            symbol	:	(['max', 'pct90', 'pct95','pct99'].includes(label)  ? 'triangle-up-open' :
-                (['min'].includes(label) ? 'triangle-down-open' : 'open')),
+            symbol: (['max','pct90','pct95','pct99'].includes (label) ? 'triangle-up-open' : (['min'].includes (label) ? 'triangle-down-open' : 'open')),
 
           }
         }
 
-        data.push(transactiondetails)
+        data.push (transactiondetails)
 
       })
 
       var layout = {
-        title: this.transaction,
+        title: 'Responsetimes of ' + this.transaction,
         autosize: true,
         height: window.innerHeight * 0.7,
         hovermode: 'closest',
@@ -100,76 +117,65 @@ export default {
         config: config
       }
 
-      console.log("retourobject: ")
-      console.log(retourobject)
       return retourobject
 
-    }
-
-  },
-  watch: {
-    transaction: function() {
-      // console.log('Calling refresh')
-      this.drawChart()
-    }
-  },
-  methods: {
-    drawChart: function() {
-      // console.log(this.transaction)
-      // console.log(this)
+    },
+    tps: function() {
 
       var config = {responsive: true}
 
-      var alltransactions = []
+      var data = []
 
-      var reduceddata = this.$d3.rollup(GlobalVariables.variables.$jtldata.filter((item) => {
-        if (item["label"] == this.transaction) return item
-      }), (d, e) => {
-        return {
-          avg: this.$d3.mean(d, e => e.elapsed),
-          max: this.$d3.max(d, e => e.elapsed),
-          min: this.$d3.min(d, e => e.elapsed),
-          pct90: this.$d3.quantile(d, 0.90, e => e.elapsed),
-          pct95: this.$d3.quantile(d, 0.95, e => e.elapsed),
-          pct99: this.$d3.quantile(d, 0.99, e => e.elapsed),
-          count: this.$d3.count(d, e => e.elapsed),
-        } } , d => parseInt(d.timeStamp / 10000))
+      var reduceddata = this.$d3.rollup (GlobalVariables.variables.$jtldata.filter ((item) => {
+            if (item["label"] == this.transaction) return item
+          }),
+          (d,e) => {
+            return {
+              tps: this.$d3.count (d,
+                  e => e.elapsed),
+            }
+          },
+          d => parseInt (d.timeStamp / 10000))
 
-      var labels = ["avg", "max", "min", "pct90", "pct95", "pct99"]
+      var labels = ["tps"]
 
-      var x = Array.from(reduceddata.keys()).map((item) => { return item * 10000})
+      var x = Array.from (reduceddata.keys ())
+          .map ((item) => {
+            return item * 10000
+          })
 
-      labels.forEach(function(label) {
+      labels.forEach (function (label) {
         // console.log(label)
 
-          var y = Array.from(reduceddata.values()).map((item) => { return item[label] / 1000})
+        var y = Array.from (reduceddata.values ())
+            .map ((item) => {
+              return item[label] / 10
+            })
 
-          var transactiondetails = {
-            type: 'line',
-            name: label,
-            x: x,
-            y: y,
-            mode: 'markers',
-            hoverlabel:
-                {
-                  namelength: -1,
-                  align: 'auto'
-                },
-            visible: (['avg', 'min', 'max'].includes(label)  ? 'yes' : 'legendonly'),
-            marker: {
-              // color: '#456E88',
-              symbol	:	(['max', 'pct90', 'pct95','pct99'].includes(label)  ? 'triangle-up-open' :
-                  (['min'].includes(label) ? 'triangle-down-open' : 'open')),
+        var transactiondetails = {
+          type: 'line',
+          name: label,
+          x: x,
+          y: y,
+          mode: 'lines',
+          hoverlabel: {
+            namelength: -1,
+            align: 'auto'
+          },
+          visible: 'yes',
+          marker: {
+            // color: '#456E88',
+            symbol: 'open',
 
-            }
           }
+        }
 
-          alltransactions.push(transactiondetails)
+        data.push (transactiondetails)
 
       })
 
       var layout = {
-        title: '',
+        title: "TPS of " + this.transaction,
         autosize: true,
         height: window.innerHeight * 0.7,
         hovermode: 'closest',
@@ -191,7 +197,7 @@ export default {
         yaxis: {
           tickformat: '',
           tick0: '0.0',
-          title: 'seconds',
+          title: 'transactions per second',
           rangemode: 'tozero'
         },
         legend: {
@@ -200,13 +206,173 @@ export default {
         }
       }
 
-      this.$plotly.newPlot(document.getElementById("chart"), alltransactions, layout, config)
+      var retourobject = {
+        data: data,
+        layout: layout,
+        config: config
+      }
 
-    }
-  },
+      return retourobject
 
-  mounted: async function () {
-    this.drawChart()
+    },
+    responsetimespercentiles: function () {
+      var config = {responsive: true}
+
+      var data = []
+
+      var reduceddata = this.$d3.rollup (GlobalVariables.variables.$jtldata.filter ((item) => {
+            if (item["label"] == this.transaction) return item
+          }),
+          (d,e) => {
+            return {
+              10: this.$d3.quantile (d,0.1,  e => e.elapsed),
+              20: this.$d3.quantile (d,0.2,  e => e.elapsed),
+              30: this.$d3.quantile (d,0.3,  e => e.elapsed),
+              40: this.$d3.quantile (d,0.4,  e => e.elapsed),
+              50: this.$d3.quantile (d,0.5,  e => e.elapsed),
+              60: this.$d3.quantile (d,0.6,  e => e.elapsed),
+              70: this.$d3.quantile (d,0.7,  e => e.elapsed),
+              80: this.$d3.quantile (d,0.8,  e => e.elapsed),
+              90: this.$d3.quantile (d,0.9,  e => e.elapsed),
+              95: this.$d3.quantile (d,0.95,  e => e.elapsed),
+              99: this.$d3.quantile (d,0.99,  e => e.elapsed),
+            }
+          },
+          )
+
+      console.log(Object.keys(reduceddata))
+
+
+
+      var x = Object.keys(reduceddata)
+
+
+      var y = Object.keys(reduceddata).map(function(label) {
+        return reduceddata[label]
+      })
+
+      console.log('x:')
+      console.log(x)
+      console.log('y:')
+      console.log(y)
+
+
+      var transactiondetails = {
+        type: 'line',
+        name: 'Percentile',
+        x: x,
+        y: y,
+        mode: 'lines',
+        hoverlabel: {
+          namelength: -1,
+          align: 'auto'
+        },
+        visible: 'yes',
+        marker: {
+          // color: '#456E88',
+          symbol: 'open',
+
+        }
+      }
+      console.log(transactiondetails)
+      data.push (transactiondetails)
+
+
+
+      var layout = {
+        title: "Percentiles  of " + this.transaction,
+        autosize: true,
+        height: window.innerHeight * 0.7,
+        hovermode: 'closest',
+        margin: {
+          l: 50,
+          r: 10,
+          t: 50,
+          b: 50,
+          pad: 10,
+          autoexpand: true
+        },
+        xaxis: {
+          //tickformat: '1',
+          title: 'Percentile',
+          //type: 'date',
+          zeroline: true,
+          nticks: 20
+        },
+        yaxis: {
+          tickformat: '',
+          tick0: '0.0',
+          title: 'responsetime in seconds',
+          rangemode: 'tozero'
+        },
+        legend: {
+          orientation: 'v',
+          traceorder: 'normal'
+        }
+      }
+
+      var retourobject = {
+        data: data,
+        layout: layout,
+        config: config
+      }
+
+      return retourobject
+
+
+    },
+    top10highestresponsetimes: function () {
+
+      var reduceddata = this.$d3.sort (GlobalVariables.variables.$jtldata.filter ((item) => {
+            if (item["label"] == this.transaction) return item.label
+          })
+              .map ((item) => { // return only the objects we really need
+                return {
+                  timeStamp: this.$moment.unix(item.timeStamp / 1000).format('YYYY-MM-DD HH:mm:ss.SSS'),
+                  elapsed: item.elapsed,
+                  responseCode: item.responseCode,
+                  responseMessage: item.responseMessage,
+                  threadName: item.threadName,
+                  success: item.success,
+                  failureMessage: item.failureMessage,
+                }
+              }),
+          (a,b) => this.$d3.descending (a.elapsed,
+              b.elapsed))
+          .slice (0, 10)
+
+
+      return reduceddata
+
+    },
+    top10lowestresponsetimes: function () {
+
+      var reduceddata = this.$d3.sort (GlobalVariables.variables.$jtldata.filter ((item) => {
+            if (item["label"] == this.transaction) return item.label
+          })
+              .map ((item) => { // return only the objects we really need
+                return {
+                  timeStamp: this.$moment.unix(item.timeStamp / 1000).format('YYYY-MM-DD HH:mm:ss.SSS'),
+                  elapsed: item.elapsed,
+                  responseCode: item.responseCode,
+                  responseMessage: item.responseMessage,
+                  threadName: item.threadName,
+                  success: item.success,
+                  failureMessage: item.failureMessage,
+                }
+              }),
+          (a,b) => this.$d3.ascending(a.elapsed,
+              b.elapsed))
+          .slice (0,
+              10)
+
+
+      return reduceddata
+
+    },
+    transaction: function () {
+      return this.$route.params.transaction
+    },
   }
 }
 </script>
@@ -214,14 +380,28 @@ export default {
 <template>
   <div class="row">
     <h1>{{ transaction }}</h1>
+
+
+    <PlotlyChart :chartdetails="responsetimes"></PlotlyChart>
+
+    <PlotlyChart :chartdetails="tps"></PlotlyChart>
+    <PlotlyChart :chartdetails="responsetimespercentiles"></PlotlyChart>
+
   </div>
+
 
   <div class="row">
-    <div id="chart"></div>
+    <h1>Top 10 highest</h1>
+    <my-table :tabledata="top10highestresponsetimes"></my-table>
+
+
+    <h1>Top 10 lowest</h1>
+    <my-table :tabledata="top10lowestresponsetimes"></my-table>
   </div>
 
-  <!-- <div>{{ responsetimes }}</div> -->
-  <PlotlyChart :chartdetails="responsetimes"></PlotlyChart>
+
+
+
 
 
 </template>
