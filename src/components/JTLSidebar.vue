@@ -1,4 +1,5 @@
 <template>
+
   <ul class="list-unstyled">
     <li class="mb-1">
       <button class="btn btn-toggle dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#overview-collapse" aria-expanded="false">
@@ -27,7 +28,8 @@
         </ul>
       </div>
     </li>
-    <li class="border-top mb-1 overflow-auto">
+
+    <li class="border-top mb-1">
       <button class="btn btn-toggle dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#transactions-collapse" aria-expanded="false">
         Transactions
       </button>
@@ -134,6 +136,7 @@
       </div>
     </li>
   </ul>
+
 </template>
 
 <script>
