@@ -1,13 +1,16 @@
 <template>
-  <div class="row">
+  <div class="row mx-auto">
     <!-- main header with app names -->
-    <div class="container-fluid px-3 py-2">
-      <div class="d-flex flex-wrap align-items-center">
-        <a href="http://www.eastern.nl/" class="d-flex align-items-center   text-white text-decoration-none">
-          <img src="@/assets/apple-touch-icon.png" width="32" height="32" >
-        </a>
+    <div class="col-12 px-2 py-2 justify-content-center my-md-0 text-small">
+      <ul class="nav justify-content-center text-small">
+        <li>
+          <a href="http://www.eastern.nl/" class="align-items-center   text-white text-decoration-none">
+            <img src="@/assets/apple-touch-icon.png" width="32" height="32" >
+          </a>
+        </li>
 
-        <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
+
+
           <li>
             <a href="#" class="nav-link text-black">
               JTL
@@ -35,8 +38,9 @@
           </li>
         </ul>
       </div>
-    </div>
   </div>
+
+
 </template>
 
 <script>

@@ -1,5 +1,5 @@
 <template>
-  <div class="row">
+  <div class="row mx-auto">
     <p>Open the JTL file</p>
 
 

@@ -146,10 +146,18 @@ export default {
   name: "SideBar",
   computed: {
     normaltransactions: function () {
-      return [...new Set(GlobalVariables.variables.$jtldata.map(item => item.label).filter((data) => !data.startsWith('#')))];
+      var uniquevalues = [...new Set(GlobalVariables.variables.$jtldata.map(item => item.label).filter((data) => !data.startsWith('#')))];
+
+      uniquevalues = this.$d3.sort(uniquevalues)
+
+      return uniquevalues
     },
     hiddentransactions: function () {
-      return [...new Set(GlobalVariables.variables.$jtldata.map(item => item.label).filter((data) => data.startsWith('#')))];
+      var uniquevalues =  [...new Set(GlobalVariables.variables.$jtldata.map(item => item.label).filter((data) => data.startsWith('#')))];
+
+      uniquevalues = this.$d3.sort(uniquevalues)
+
+      return uniquevalues
     }
 
 

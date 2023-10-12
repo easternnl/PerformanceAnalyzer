@@ -1,7 +1,7 @@
 <template>
-  <div class="row">
+  <div class="row mx-auto">
     <!-- secondary header with app specific buttons -->
-    <div class="container-fluid d-flex flex-wrap px-3 py-2 border-bottom mb-3 bg-secondary">
+    <div class="border-bottom mb-3 bg-secondary px-2 py-2">
 
       <router-link to="/open"><button type="button" class="btn me-2 text-white">Open</button></router-link>
       <button type="button" class="btn btn-primary text-white">Compare</button>
