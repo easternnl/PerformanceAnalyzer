@@ -82,7 +82,7 @@ export default {
       var layout = {
         title: 'Responsetimes of ' + this.transaction,
         autosize: true,
-        height: window.innerHeight * 0.7,
+        height: window.innerHeight * 0.5,
         hovermode: 'closest',
         margin: {
           l: 50,
@@ -177,7 +177,7 @@ export default {
       var layout = {
         title: "TPS of " + this.transaction,
         autosize: true,
-        height: window.innerHeight * 0.7,
+        height: window.innerHeight * 0.3,
         hovermode: 'closest',
         margin: {
           l: 50,
@@ -200,6 +200,7 @@ export default {
           title: 'transactions per second',
           rangemode: 'tozero'
         },
+        showlegend: true,
         legend: {
           orientation: 'v',
           traceorder: 'normal'
@@ -282,7 +283,7 @@ export default {
       var layout = {
         title: "Percentiles  of " + this.transaction,
         autosize: true,
-        height: window.innerHeight * 0.7,
+        height: window.innerHeight * 0.3,
         hovermode: 'closest',
         margin: {
           l: 50,
@@ -305,6 +306,7 @@ export default {
           title: 'responsetime in seconds',
           rangemode: 'tozero'
         },
+        showlegend: true,
         legend: {
           orientation: 'v',
           traceorder: 'normal'

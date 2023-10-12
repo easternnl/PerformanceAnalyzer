@@ -82,7 +82,7 @@ export default {
       var layout = {
         title: '', // this.transaction,
         autosize: true,
-        height: window.innerHeight * 0.7,
+        height: window.innerHeight * 0.5,
         hovermode: 'closest',
         margin: {
           l: 50,
@@ -150,7 +150,7 @@ export default {
 
       var transactiondetails = {
         type: 'line',
-        name: 'TPS of all transactions',
+        name: 'TPS',
         x: x,
         y: y,
         mode: 'lines',
@@ -169,7 +169,7 @@ export default {
       var layout = {
         title: 'TPS of all transactions',
         autosize: true,
-        height: window.innerHeight * 0.7,
+        height: window.innerHeight * 0.3,
         hovermode: 'closest',
         margin: {
           l: 50,
@@ -192,9 +192,10 @@ export default {
           title: 'transactions per second',
           rangemode: 'tozero'
         },
+        showlegend: true,
         legend: {
           orientation: 'v',
-          traceorder: 'normal'
+          traceorder: 'normal',
         }
       }
 

@@ -23,7 +23,7 @@ import Dashboard from "@/components/Dashboard.vue";
   <div>
     <div class="row mx-auto">
 
-      <div class="col-3">
+      <div class="col-3 overflow-auto vh-100" >
         <router-view class="sidebar" name="sidebar"></router-view>
       </div>
       <div class="col-9">

@@ -52,7 +52,8 @@
 
           </div>
         </ul>
-      </div>
+        </div>
+
     </li>
     <li class="border-top mb-1">
       <button class="btn btn-toggle dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#hiddentransactions-collapse" aria-expanded="false">

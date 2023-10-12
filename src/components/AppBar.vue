@@ -1,8 +1,8 @@
 <template>
   <div class="row mx-auto">
     <!-- main header with app names -->
-    <div class="col-12 px-2 py-2 justify-content-center my-md-0 text-small">
-      <ul class="nav justify-content-center text-small">
+    <div class="col-12 px-2 py-2  text-start my-md-0 text-small">
+      <ul class="nav">
         <li>
           <a href="http://www.eastern.nl/" class="align-items-center   text-white text-decoration-none">
             <img src="@/assets/apple-touch-icon.png" width="32" height="32" >
