@@ -18,7 +18,7 @@ export default {
         }
       }, d => d.failureMessage)
       console.log('Failuremessages: ')
-      console.log(reduceddata)
+      // console.log(reduceddata)
 
       var data = []
 
