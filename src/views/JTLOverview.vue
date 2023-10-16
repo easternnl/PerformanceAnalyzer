@@ -14,6 +14,44 @@ export default {
     hiddentransactions: function () {
       return [...new Set(GlobalVariables.variables.$jtldata.map(item => item.label).filter((data) => data.startsWith('#')))];
     },
+    testdata: function() {
+
+      function humanizeDuration(duration, unit, moment) {
+        var durationObj = moment.duration(duration, unit);
+        var durationStringArray = [];
+
+
+        Object.keys(durationObj._data)
+            .filter((key) => durationObj._data[key] > 0)
+            .forEach((key) => {
+              durationStringArray.push(
+                  moment.duration(durationObj._data[key], key).humanize(false)
+            );
+            });
+        return durationStringArray.reverse().join(', ');
+      }
+
+
+      return [
+        { Name: 'Starttime', Value: this.$moment(GlobalVariables.variables.$jtlinfo["min"]).format('YYYY-MM-DD hh:mm:ss') },
+        { Name: 'Stoptime', Value: this.$moment(GlobalVariables.variables.$jtlinfo["max"]).format('YYYY-MM-DD HH:mm:ss') },
+        // nice but not so precise { Name: 'Duration', Value: humanizeDuration(GlobalVariables.variables.$jtlinfo["duration"], 'ms')
+        { Name: 'Duration', Value: humanizeDuration(GlobalVariables.variables.$jtlinfo["duration"], 'ms', this.$moment) },
+        // giving the code as value { Name: 'Duration', Value: function() {
+        //     var durationObj = this.$moment.duration(duration, unit);
+        //     var durationStringArray = [];
+        //
+        //     Object.keys(durationObj._data)
+        //         .filter((key) => durationObj._data[key] > 0)
+        //         .forEach((key) => {
+        //           durationStringArray.push(
+        //               this.$moment.duration(durationObj._data[key], key).humanize()
+        //           );
+        //         });
+        //     return durationStringArray.reverse().join(', ');
+        //   }      },
+      ]
+    },
     alltransactionsoverviewtable: function() {
       var reduceddata = this.$d3.rollup(GlobalVariables.variables.$jtldata.filter ((item) => {
             if (this.normaltransactions.includes(item.label)) return item
@@ -37,6 +75,10 @@ export default {
                   e => e.elapsed),
               count: this.$d3.count (v,
                   e => e.elapsed),
+              success: this.$d3.count (v,
+                  e => { if (e.success == 'true') return true } ),
+              failed: this.$d3.count (v,
+                  e => { if (e.success == 'false') return true} ),
             }
           },
           d => d.label)
@@ -57,11 +99,86 @@ export default {
           Percentile95: Math.round(reduceddata.get(label)["pct95"]  ) / 1000,
           Percentile99: Math.round(reduceddata.get(label)["pct99"]  ) / 1000,
           Count: Math.round(reduceddata.get(label)["count"]  ) ,
+          Success: Math.round(reduceddata.get(label)["success"]  ) ,
+          Failed: Math.round(reduceddata.get(label)["failed"]  ) ,
         })
       })
 
       return data
-    }
+    },
+    allresponsemessages: function () {
+      var reduceddata = this.$d3.rollup(GlobalVariables.variables.$jtldata.filter ((item) => {
+        if (this.normaltransactions.includes(item.label)) return item
+      }), (v,e) => {
+        return {
+          count: this.$d3.count(v, e => e.elapsed),
+
+        }
+      }, d => d.responseMessage)
+
+      console.log(reduceddata)
+
+      var data = []
+
+      // reformat the output and the sequence of the labels to show in the table
+      Array.from (reduceddata.keys()).forEach(function(responseMessage) {
+        data.push({
+          responseMessage: responseMessage,
+          Count: Math.round(reduceddata.get(responseMessage)["count"]  ) ,
+        })
+      })
+
+      return data
+    },
+    allresponsecodes: function () {
+      var reduceddata = this.$d3.rollup(GlobalVariables.variables.$jtldata.filter ((item) => {
+        if (this.normaltransactions.includes(item.label)) return item
+      }), (v,e) => {
+        return {
+          count: this.$d3.count(v, e => e.responseCode),
+        }
+      }, d => d.responseCode)
+
+      var data = []
+
+      // reformat the output and the sequence of the labels to show in the table
+      Array.from (reduceddata.keys()).forEach(function(responsecode) {
+        data.push({
+          Responsecode: responsecode,
+          Count: Math.round(reduceddata.get(responsecode)["count"]  ) ,
+        })
+      })
+
+      return data
+
+
+    },
+    allfailuremessages: function () {
+      var reduceddata = this.$d3.rollup(GlobalVariables.variables.$jtldata.filter ((item) => {
+        if (this.normaltransactions.includes(item.label) && item.failureMessage != '' ) return true
+      }), (v,e) => {
+        return {
+          count: this.$d3.count(v, e => e.elapsed),
+
+        }
+      }, d => d.failureMessage)
+      console.log('Failuremessages: ')
+      console.log(reduceddata)
+
+      var data = []
+
+      // reformat the output and the sequence of the labels to show in the table
+      Array.from (reduceddata.keys()).forEach(function(failureMessage) {
+        data.push({
+          failureMessage: failureMessage,
+          Count: Math.round(reduceddata.get(failureMessage)["count"]  ) ,
+        })
+      })
+
+      return data
+
+
+    },
 
 
 
@@ -75,7 +192,11 @@ export default {
   <div class="row">
     <h1>Overview</h1>
 
+    <my-table :tabledata="testdata"></my-table>
     <my-table :tabledata="alltransactionsoverviewtable"></my-table>
+    <my-table :tabledata="allresponsecodes"></my-table>
+    <my-table :tabledata="allresponsemessages"></my-table>
+    <my-table :tabledata="allfailuremessages"></my-table>
 <!--    <my-table :tabledata="alltransactionsoverviewtable"></my-table>-->
   </div>
 </template>
