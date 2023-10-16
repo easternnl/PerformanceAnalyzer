@@ -92,13 +92,13 @@
               </div>
               <div class="col-10 mb-1 small">All non 200 response codes</div>
             </a>
-            <a href="#x2" class="list-group-item list-group-item-action py-3 lh-sm">
+            <router-link to="/jtlallfailuremessages" class="list-group-item list-group-item-action py-3 lh-sm border-0">
               <div class="d-flex w-100 align-items-center justify-content-between">
-                <strong class="mb-1">All failuremessages</strong>
-
+                <strong class="mb-1">Failure Messages</strong>
+                <small>Tip</small>
               </div>
-              <div class="col-10 mb-1 small">Shows all failure messages</div>
-            </a>
+              <div class="col-10 mb-1 small">Table displaying overview with all failure messages</div>
+            </router-link>
           </div>
 
         </div>
