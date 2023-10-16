@@ -27,7 +27,9 @@ export default {
   },
   computed: {
     columns: function () {
-      return Object.keys(this.tabledata[0])
+      if (this.tabledata.length > 0) {
+        return Object.keys(this.tabledata[0])
+      }
     },
     tabledatasorted: function() {
       if (this.sortkey != '') {
