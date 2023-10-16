@@ -49,7 +49,7 @@ export default {
             return item * 10000
           })
 
-      labels.forEach (function (label) {
+      labels.forEach ((label) => {
         // console.log(label)
 
         var y = Array.from (reduceddata.values ())
@@ -97,7 +97,8 @@ export default {
           title: 'Time',
           type: 'date',
           zeroline: true,
-          nticks: 20
+          nticks: 20,
+          range: [GlobalVariables.variables.$jtlinfo["min"] - (GlobalVariables.variables.$jtlinfo["duration"] * 0.1), GlobalVariables.variables.$jtlinfo["max"] + (GlobalVariables.variables.$jtlinfo["duration"] * 0.1)],
         },
         yaxis: {
           tickformat: '',
@@ -144,7 +145,7 @@ export default {
             return item * 10000
           })
 
-      labels.forEach (function (label) {
+      labels.forEach ((label) => {
         // console.log(label)
 
         var y = Array.from (reduceddata.values ())
@@ -192,7 +193,8 @@ export default {
           title: 'Time',
           type: 'date',
           zeroline: true,
-          nticks: 20
+          nticks: 20,
+          range: [GlobalVariables.variables.$jtlinfo["min"] - (GlobalVariables.variables.$jtlinfo["duration"] * 0.1), GlobalVariables.variables.$jtlinfo["max"] + (GlobalVariables.variables.$jtlinfo["duration"] * 0.1)],
         },
         yaxis: {
           tickformat: '',
@@ -216,6 +218,104 @@ export default {
       return retourobject
 
     },
+    errorsovertime: function() {
+
+      var config = {responsive: true}
+
+      var data = []
+
+      var reduceddata = this.$d3.rollup (GlobalVariables.variables.$jtldata.filter ((item) => {
+            if (item["label"] == this.transaction && item.success == 'false') return item
+          }),
+          (d,e) => {
+            return {
+              tps: this.$d3.count (d,
+                  e => e.elapsed),
+            }
+          },
+          d => parseInt (d.timeStamp / 10000))
+
+      var labels = ["tps"]
+
+      var x = Array.from (reduceddata.keys ())
+          .map ((item) => {
+            return item * 10000
+          })
+
+      labels.forEach ((label) => {
+        // console.log(label)
+
+        var y = Array.from (reduceddata.values ())
+            .map ((item) => {
+              return item[label] / 10
+            })
+
+        var transactiondetails = {
+          type: 'line',
+          name: label,
+          x: x,
+          y: y,
+          mode: 'lines',
+          hoverlabel: {
+            namelength: -1,
+            align: 'auto'
+          },
+          visible: 'yes',
+          marker: {
+            color: '#FF0000',
+            symbol: 'open',
+
+          }
+        }
+
+        data.push (transactiondetails)
+
+      })
+
+      var layout = {
+        title: "Errors occuring over time for " + this.transaction,
+        autosize: true,
+        height: window.innerHeight * 0.3,
+        hovermode: 'closest',
+        margin: {
+          l: 50,
+          r: 10,
+          t: 50,
+          b: 50,
+          pad: 10,
+          autoexpand: true
+        },
+        xaxis: {
+          //tickformat: '1',
+          title: 'Time',
+          type: 'date',
+          zeroline: true,
+          nticks: 20,
+          range: [GlobalVariables.variables.$jtlinfo["min"] - (GlobalVariables.variables.$jtlinfo["duration"] * 0.1), GlobalVariables.variables.$jtlinfo["max"] + (GlobalVariables.variables.$jtlinfo["duration"] * 0.1)],
+        },
+        yaxis: {
+          tickformat: '',
+          tick0: '0.0',
+          title: 'Errors occuring over time per second',
+          rangemode: 'tozero'
+        },
+        showlegend: true,
+        legend: {
+          orientation: 'v',
+          traceorder: 'normal'
+        }
+      }
+
+      var retourobject = {
+        data: data,
+        layout: layout,
+        config: config
+      }
+
+      return retourobject
+
+    },
+
     responsetimespercentiles: function () {
       var config = {responsive: true}
 
@@ -298,7 +398,8 @@ export default {
           title: 'Percentile',
           //type: 'date',
           zeroline: true,
-          nticks: 20
+          nticks: 20,
+
         },
         yaxis: {
           tickformat: '',
@@ -375,7 +476,81 @@ export default {
     transaction: function () {
       return this.$route.params.transaction
     },
+    allresponsemessages: function () {
+      var reduceddata = this.$d3.rollup(GlobalVariables.variables.$jtldata.filter ((item) => {
+        if (item["label"] == this.transaction) return item.label
+      }), (v,e) => {
+        return {
+          count: this.$d3.count(v, e => e.elapsed),
+        }
+      }, d => d.responseMessage)
+
+      console.log(reduceddata)
+
+      var data = []
+
+      // reformat the output and the sequence of the labels to show in the table
+      Array.from (reduceddata.keys()).forEach(function(responseMessage) {
+        data.push({
+          responseMessage: responseMessage,
+          Count: Math.round(reduceddata.get(responseMessage)["count"]  ) ,
+        })
+      })
+
+      return data
+    },
+    allresponsecodes: function () {
+      var reduceddata = this.$d3.rollup(GlobalVariables.variables.$jtldata.filter ((item) => {
+        if (item["label"] == this.transaction) return item.label
+      }), (v,e) => {
+        return {
+          count: this.$d3.count(v, e => e.responseCode),
+        }
+      }, d => d.responseCode)
+
+      var data = []
+
+      // reformat the output and the sequence of the labels to show in the table
+      Array.from (reduceddata.keys()).forEach(function(responsecode) {
+        data.push({
+          Responsecode: responsecode,
+          Count: Math.round(reduceddata.get(responsecode)["count"]  ) ,
+        })
+      })
+
+      return data
+
+
+    },
+    allfailuremessages: function () {
+      var reduceddata = this.$d3.rollup(GlobalVariables.variables.$jtldata.filter ((item) => {
+        if (item["label"] == this.transaction && item.failureMessage != '') return item.label
+      }), (v,e) => {
+        return {
+          count: this.$d3.count(v, e => e.elapsed),
+        }
+      }, d => d.failureMessage)
+
+      console.log(reduceddata)
+
+      var data = []
+
+      // reformat the output and the sequence of the labels to show in the table
+      Array.from (reduceddata.keys()).forEach(function(failureMessage) {
+        data.push({
+          failureMessage: failureMessage,
+          Count: Math.round(reduceddata.get(failureMessage)["count"]  ) ,
+        })
+      })
+
+      return data
+
+
+    },
+  },
+  mounted() {
   }
+  
 }
 </script>
 
@@ -387,6 +562,7 @@ export default {
     <PlotlyChart :chartdetails="responsetimes"></PlotlyChart>
 
     <PlotlyChart :chartdetails="tps"></PlotlyChart>
+    <PlotlyChart :chartdetails="errorsovertime"></PlotlyChart>
     <PlotlyChart :chartdetails="responsetimespercentiles"></PlotlyChart>
 
   </div>
@@ -399,6 +575,15 @@ export default {
 
     <h1>Top 10 lowest</h1>
     <my-table :tabledata="top10lowestresponsetimes"></my-table>
+
+    <h1>All response messages</h1>
+    <my-table :tabledata="allresponsemessages"></my-table>
+
+    <h1>All response codes</h1>
+    <my-table :tabledata="allresponsecodes"></my-table>
+
+    <h1>All failure messages</h1>
+    <my-table :tabledata="allfailuremessages"></my-table>
   </div>
 
 
