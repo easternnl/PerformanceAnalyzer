@@ -30,6 +30,10 @@ import router from './router'
 const app = createApp(App)
 
 app.config.globalProperties.$jtldata = 'init'
+app.config.globalProperties.$jtlinfo = {
+    type: Object,
+    default: () => {}
+}
 app.config.globalProperties.$nprogress = nprogress; // Allow nprogress in all componenets this.$nprogress.function()
 app.config.globalProperties.$plotly = Plotly; // Allow Plotly in all componenets this.$plotly
 app.config.globalProperties.$moment = Moment; // use moment everywhere in the app
