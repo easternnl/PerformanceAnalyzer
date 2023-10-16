@@ -27,6 +27,7 @@ export default {
   },
   methods: {
     drawChart: function () {
+
       this.$plotly.newPlot(document.getElementById(this.chartid), this.chartdetails["data"], this.chartdetails["layout"], this.chartdetails["config"])
     }
   },
