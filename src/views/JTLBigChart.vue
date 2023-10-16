@@ -97,7 +97,8 @@ export default {
           title: 'Time',
           type: 'date',
           zeroline: true,
-          nticks: 20
+          nticks: 20,
+          range: [GlobalVariables.variables.$jtlinfo["min"] - (GlobalVariables.variables.$jtlinfo["duration"] * 0.1), GlobalVariables.variables.$jtlinfo["max"] + (GlobalVariables.variables.$jtlinfo["duration"] * 0.1)],
         },
         yaxis: {
           tickformat: '',
@@ -184,7 +185,8 @@ export default {
           title: 'Time',
           type: 'date',
           zeroline: true,
-          nticks: 20
+          nticks: 20,
+          range: [GlobalVariables.variables.$jtlinfo["min"] - (GlobalVariables.variables.$jtlinfo["duration"] * 0.1), GlobalVariables.variables.$jtlinfo["max"] + (GlobalVariables.variables.$jtlinfo["duration"] * 0.1)],
         },
         yaxis: {
           tickformat: '',
@@ -209,7 +211,104 @@ export default {
       console.log (retourobject)
       return retourobject
 
+    },
+    allnonsuccess: function() {
+      var config = {responsive: true}
+
+      var data = []
+
+      var reduceddata = this.$d3.rollup (GlobalVariables.variables.$jtldata.filter ((item) => {
+            if (this.normaltransactions.includes(item.label) && item.success == 'false') return item
+          }),
+          (v,e) => {
+            return {
+              errors: this.$d3.count (v,
+                  e => e.elapsed),
+            }
+          },
+          d => d.label, d => parseInt (d.timeStamp / 10000))
+
+      console.log('Rollup map:')
+      console.log(reduceddata)
+
+      Array.from (reduceddata.keys ()).forEach(function(label) {
+        console.log('Adding label ' + label)
+
+        var x = Array.from (reduceddata.get(label).keys ())
+            .map ((item) => {
+              return item * 10000
+            })
+
+        var y = Array.from (reduceddata.get(label).values ())
+            .map ((item) => {
+              return item["errors"] / 10
+            })
+
+        var transactiondetails = {
+          type: 'line',
+          name: label,
+          x: x,
+          y: y,
+          mode: 'markers',
+          hoverlabel: {
+            namelength: -1,
+            align: 'auto'
+          },
+          visible: 'yes',
+          marker: {
+            symbol: 'open',
+          }
+        }
+
+        data.push (transactiondetails)
+
+      })
+
+      var layout = {
+        title: 'Errors per transactions', // this.transaction,
+        autosize: true,
+        height: window.innerHeight * 0.3,
+        hovermode: 'closest',
+        margin: {
+          l: 50,
+          r: 10,
+          t: 50,
+          b: 50,
+          pad: 10,
+          autoexpand: true
+        },
+        xaxis: {
+          //tickformat: '1',
+          title: 'Time',
+          type: 'date',
+          zeroline: true,
+          nticks: 20,
+          range: [GlobalVariables.variables.$jtlinfo["min"] - (GlobalVariables.variables.$jtlinfo["duration"] * 0.1), GlobalVariables.variables.$jtlinfo["max"]+ (GlobalVariables.variables.$jtlinfo["duration"] * 0.1)],
+        },
+        yaxis: {
+          tickformat: '',
+          tick0: '0.0',
+          title: 'errors per second',
+          rangemode: 'tozero'
+        },
+        legend: {
+          orientation: 'v',
+          traceorder: 'normal'
+        }
+      }
+
+      var retourobject = {
+        data: data,
+        layout: layout,
+        config: config
+      }
+
+      console.log ("retourobject: ")
+      console.log (retourobject)
+      return retourobject
+
     }
+
   },
   async mounted() {
 
@@ -222,6 +321,7 @@ export default {
   <h1>Overview chart of all transactions</h1>
   <PlotlyChart :chartdetails="responsetimes"></PlotlyChart>
   <PlotlyChart :chartdetails="tps"></PlotlyChart>
+  <PlotlyChart :chartdetails="allnonsuccess"></PlotlyChart>
 
 </template>
 
