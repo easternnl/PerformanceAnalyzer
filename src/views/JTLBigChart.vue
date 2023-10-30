@@ -4,10 +4,28 @@ import PlotlyChart from "@/components/PlotlyChart.vue";
 
 export default {
   name: "JTLBigChart",
+  props: ['view'],
   components: {PlotlyChart},
   computed: {
-    normaltransactions: function () {
-      return [...new Set(GlobalVariables.variables.$jtldata.map(item => item.label).filter((data) => !data.startsWith('#')))];
+    transactions: function () {
+
+      console.log('Current view is: ' + this.view)
+
+      if (this.view == 'normal') {
+        console.log('Returning normal transactions')
+        return [...new Set(GlobalVariables.variables.$jtldata.map(item => item.label).filter((data) => !data.startsWith('#')))];
+      }
+      else if (this.view == 'hidden')
+      {
+        console.log('Returning hidden transactions')
+        return [...new Set(GlobalVariables.variables.$jtldata.map(item => item.label).filter((data) => data.startsWith('#')))];
+      }
+      else
+      {
+        console.log('Returning ALL TRANSACTIONS')
+        return [...new Set(GlobalVariables.variables.$jtldata.map(item => item.label))];  // return all
+      }
+
     },
     responsetimes: function () {
 
@@ -16,7 +34,7 @@ export default {
       var data = []
 
       var reduceddata = this.$d3.rollup (GlobalVariables.variables.$jtldata.filter ((item) => {
-            if (this.normaltransactions.includes(item.label)) return item
+            if (this.transactions.includes(item.label)) return item
           }),
           (v,e) => {
             return {
@@ -44,7 +62,7 @@ export default {
       console.log('Rollup map:')
       console.log(reduceddata)
 
-      this.normaltransactions.forEach(function (label) {
+      this.transactions.forEach(function (label) {
         console.log('Adding label ' + label)
 
         var x = Array.from (reduceddata.get(label).keys ())
@@ -98,7 +116,10 @@ export default {
           type: 'date',
           zeroline: true,
           nticks: 20,
-          range: [GlobalVariables.variables.$jtlinfo["min"] - (GlobalVariables.variables.$jtlinfo["duration"] * 0.1), GlobalVariables.variables.$jtlinfo["max"] + (GlobalVariables.variables.$jtlinfo["duration"] * 0.1)],
+          range: [
+            GlobalVariables.variables.$jtlinfo["min"] - (GlobalVariables.variables.$jtlinfo["duration"] * 0.05),
+            GlobalVariables.variables.$jtlinfo["max"] + (GlobalVariables.variables.$jtlinfo["duration"] * 0.05)
+          ],
         },
         yaxis: {
           tickformat: '',
@@ -106,8 +127,17 @@ export default {
           title: 'seconds',
           rangemode: 'tozero'
         },
+        showlegend: true,
         legend: {
+          x: 1,
+          y: 1,
+          xanchor: 'right',
+          bgcolor: '#fffff',
+          borderwidth: 1,
+          bordercolor: '#444',
           orientation: 'v',
+          itemclick: 'toggleothers',
+          itemdoubleclick: 'toggle',
           traceorder: 'normal'
         }
       }
@@ -129,7 +159,7 @@ export default {
       var data = []
 
       var reduceddata = this.$d3.rollup (GlobalVariables.variables.$jtldata.filter ((item) => {
-            if (this.normaltransactions.includes(item.label)) return item
+            if (this.transactions.includes(item.label)) return item
         }),
         (v,e) => {
           return {
@@ -186,7 +216,10 @@ export default {
           type: 'date',
           zeroline: true,
           nticks: 20,
-          range: [GlobalVariables.variables.$jtlinfo["min"] - (GlobalVariables.variables.$jtlinfo["duration"] * 0.1), GlobalVariables.variables.$jtlinfo["max"] + (GlobalVariables.variables.$jtlinfo["duration"] * 0.1)],
+          range: [
+            GlobalVariables.variables.$jtlinfo["min"] - (GlobalVariables.variables.$jtlinfo["duration"] * 0.05),
+            GlobalVariables.variables.$jtlinfo["max"] + (GlobalVariables.variables.$jtlinfo["duration"] * 0.05)
+          ],
         },
         yaxis: {
           tickformat: '',
@@ -196,8 +229,16 @@ export default {
         },
         showlegend: true,
         legend: {
+          x: 1,
+          y: 1,
+          xanchor: 'right',
+          bgcolor: '#fffff',
+          borderwidth: 1,
+          bordercolor: '#444',
           orientation: 'v',
-          traceorder: 'normal',
+          itemclick: 'toggleothers',
+          itemdoubleclick: 'toggle',
+          traceorder: 'normal'
         }
       }
 
@@ -218,7 +259,7 @@ export default {
       var data = []
 
       var reduceddata = this.$d3.rollup (GlobalVariables.variables.$jtldata.filter ((item) => {
-            if (this.normaltransactions.includes(item.label) && item.success == 'false') return item
+            if (this.transactions.includes(item.label) && item.success == 'false') return item
           }),
           (v,e) => {
             return {
@@ -283,7 +324,10 @@ export default {
           type: 'date',
           zeroline: true,
           nticks: 20,
-          range: [GlobalVariables.variables.$jtlinfo["min"] - (GlobalVariables.variables.$jtlinfo["duration"] * 0.1), GlobalVariables.variables.$jtlinfo["max"]+ (GlobalVariables.variables.$jtlinfo["duration"] * 0.1)],
+          range: [
+            GlobalVariables.variables.$jtlinfo["min"] - (GlobalVariables.variables.$jtlinfo["duration"] * 0.05),
+            GlobalVariables.variables.$jtlinfo["max"] + (GlobalVariables.variables.$jtlinfo["duration"] * 0.05)
+          ],
         },
         yaxis: {
           tickformat: '',
@@ -291,8 +335,17 @@ export default {
           title: 'errors per second',
           rangemode: 'tozero'
         },
+        showlegend: true,
         legend: {
+          x: 1,
+          y: 1,
+          xanchor: 'right',
+          bgcolor: '#fffff',
+          borderwidth: 1,
+          bordercolor: '#444',
           orientation: 'v',
+          itemclick: 'toggleothers',
+          itemdoubleclick: 'toggle',
           traceorder: 'normal'
         }
       }
@@ -310,19 +363,23 @@ export default {
     }
 
   },
-  async mounted() {
-
+  updated() {
+    this.$nprogress.done(true)
+  },
+  mounted() {
+    this.$nprogress.done(true)
   }
 }
 
 </script>
 
 <template>
-  <h1>Overview chart of all transactions</h1>
-  <PlotlyChart :chartdetails="responsetimes"></PlotlyChart>
-  <PlotlyChart :chartdetails="tps"></PlotlyChart>
-  <PlotlyChart :chartdetails="allnonsuccess"></PlotlyChart>
-
+  <div class="row">
+    <h1>Overview chart of all transactions</h1>
+    <PlotlyChart :chartdetails="responsetimes"></PlotlyChart>
+    <PlotlyChart :chartdetails="tps"></PlotlyChart>
+    <PlotlyChart :chartdetails="allnonsuccess"></PlotlyChart>
+  </div>
 </template>
 
 <style scoped>
