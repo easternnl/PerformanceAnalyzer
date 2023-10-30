@@ -131,24 +131,19 @@
       <div class="collapse" id="debug-collapse">
         <div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-body-tertiary" >
           <div class="list-group list-group-flush scrollarea">
-            <a href="#x1" class="list-group-item list-group-item-action py-3 lh-sm border-0">
+            <router-link to="/jtldebugfirstlast" class="list-group-item list-group-item-action py-3 lh-sm border-0">
               <div class="d-flex w-100 align-items-center justify-content-between">
-                <strong class="mb-1">x1x</strong>
+                <strong class="mb-1">First & Last transactions</strong>
                 <small>Pro</small>
               </div>
-              <div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div>
-            </a>
+              <div class="col-10 mb-1 small">Where did the test start and stop with - based on timestamp and sequence.</div>
+            </router-link>
             <a href="#x2" class="list-group-item list-group-item-action py-3 lh-sm">
               <div class="d-flex w-100 align-items-center justify-content-between">
-                <strong class="mb-1">List group item heading</strong>
+                <strong class="mb-1">Filter transactions</strong>
+                <small>Pro</small>
               </div>
-              <div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div>
-            </a>
-            <a href="#x3" class="list-group-item list-group-item-action py-3 lh-sm">
-              <div class="d-flex w-100 align-items-center justify-content-between">
-                <strong class="mb-1">List group item heading</strong>
-              </div>
-              <div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div>
+              <div class="col-10 mb-1 small">Create your own filters to debug the performance testing.</div>
             </a>
           </div>
 
