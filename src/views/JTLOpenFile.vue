@@ -13,6 +13,10 @@ import { inject } from 'vue'
 import GlobalVariables from "@/GlobalVariableHolder";
 
 export default {
+  mounted() {
+    console.log('Mounted')
+    this.$nprogress.done(true)
+  },
   methods: {
     onChange(event) {
       this.$emit('update:modelValue', event.target.files[0]);
@@ -34,8 +38,16 @@ export default {
       console.log("Init readfile")
       console.log(GlobalVariables.variables.$jtldata)
 
+      this.$nprogress.start()
 
+      console.log("Loading lines")
       var lines = await this.uploadFile(input.target.files[0]);
+
+      console.log("Lines loaded")
+
+      await this.$nprogress.inc(0.4)
+
+      console.log("Parsing data")
 
       GlobalVariables.variables.$jtldata = this.$d3.csvParse(lines, (d) => {
         return {
@@ -63,11 +75,24 @@ export default {
 
         };
       });
+      console.log("Parsing done")
+      await this.$nprogress.inc(0.7)
+
+      console.log("Calculating meta data)")
+
+      GlobalVariables.variables.$jtlinfo["min"] = this.$d3.min (GlobalVariables.variables.$jtldata,e => e.timeStamp)
+      GlobalVariables.variables.$jtlinfo["max"] = this.$d3.max (GlobalVariables.variables.$jtldata,e => e.timeStamp)
+      GlobalVariables.variables.$jtlinfo["duration"] = GlobalVariables.variables.$jtlinfo["max"] - GlobalVariables.variables.$jtlinfo["min"]
+      GlobalVariables.variables.$jtlinfo["filename"] = input.target.files[0]
+
+      console.log("Calculating meta data done)")
 
       console.log(GlobalVariables.variables.$jtldata)
       console.log('Readfile finished')
 
-      this.$router.push('/jtloverview')
+      await this.$nprogress.inc(0.8)
+
+      this.$router.push('/jtloverviewnormal')
     }
 
   },
