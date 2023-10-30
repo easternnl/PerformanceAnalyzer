@@ -6,13 +6,28 @@ import MyTable from "@/components/MyTable.vue";
 
 export default {
   name: 'JTLOverview',
+  props: ['view'],
   components: {MyTable},
   computed: {
-    normaltransactions: function () {
-      return [...new Set(GlobalVariables.variables.$jtldata.map(item => item.label).filter((data) => !data.startsWith('#')))];
-    },
-    hiddentransactions: function () {
-      return [...new Set(GlobalVariables.variables.$jtldata.map(item => item.label).filter((data) => data.startsWith('#')))];
+    transactions: function () {
+
+      console.log('Current view is: ' + this.view)
+
+      if (this.view == 'normal') {
+        console.log('Returning normal transactions')
+        return [...new Set(GlobalVariables.variables.$jtldata.map(item => item.label).filter((data) => !data.startsWith('#')))];
+      }
+      else if (this.view == 'hidden')
+      {
+        console.log('Returning hidden transactions')
+        return [...new Set(GlobalVariables.variables.$jtldata.map(item => item.label).filter((data) => data.startsWith('#')))];
+      }
+      else
+      {
+        console.log('Returning ALL TRANSACTIONS')
+        return [...new Set(GlobalVariables.variables.$jtldata.map(item => item.label))];  // return all
+      }
+
     },
     testdata: function() {
 
@@ -54,7 +69,7 @@ export default {
     },
     alltransactionsoverviewtable: function() {
       var reduceddata = this.$d3.rollup(GlobalVariables.variables.$jtldata.filter ((item) => {
-            if (this.normaltransactions.includes(item.label)) return item
+            if (this.transactions.includes(item.label)) return item
           }),
           (v,e) => {
             return {
@@ -108,7 +123,7 @@ export default {
     },
     allresponsemessages: function () {
       var reduceddata = this.$d3.rollup(GlobalVariables.variables.$jtldata.filter ((item) => {
-        if (this.normaltransactions.includes(item.label)) return item
+        if (this.transactions.includes(item.label)) return item
       }), (v,e) => {
         return {
           count: this.$d3.count(v, e => e.elapsed),
@@ -132,7 +147,7 @@ export default {
     },
     allresponsecodes: function () {
       var reduceddata = this.$d3.rollup(GlobalVariables.variables.$jtldata.filter ((item) => {
-        if (this.normaltransactions.includes(item.label)) return item
+        if (this.transactions.includes(item.label)) return item
       }), (v,e) => {
         return {
           count: this.$d3.count(v, e => e.responseCode),
@@ -155,7 +170,7 @@ export default {
     },
     allfailuremessages: function () {
       var reduceddata = this.$d3.rollup(GlobalVariables.variables.$jtldata.filter ((item) => {
-        if (this.normaltransactions.includes(item.label) && item.failureMessage != '' ) return true
+        if (this.transactions.includes(item.label) && item.failureMessage != '' ) return true
       }), (v,e) => {
         return {
           count: this.$d3.count(v, e => e.elapsed),
@@ -182,6 +197,16 @@ export default {
 
 
 
+  },
+  updated() {
+    console.log('updated')
+    this.$nprogress.done(true)
+  },
+  mounted() {
+    console.log('mounted')
+    this.$nprogress.done(true)
+
+    // this.view = 'normal'
   }
 }
 
@@ -190,7 +215,7 @@ export default {
 
 <template>
   <div class="row">
-    <h1>Overview</h1>
+    <h1>Overview {{ view }}</h1>
 
     <my-table :tabledata="testdata"></my-table>
     <my-table :tabledata="alltransactionsoverviewtable"></my-table>
