@@ -2,6 +2,10 @@
   <div class="row mx-auto">
     <p>Open the JTL file</p>
 
+    Import response messages: <input type="checkbox" v-model="responsemessages" v-bind:value="true">
+    Import failure messages: <input type="checkbox" v-model="failuremessages" v-bind:value="true">
+    Import hidden transactions <input type="checkbox" v-model="hiddentransactions" v-bind:value="true">
+
 
     <input class="btn btn-primary" type="file" @change="readFile($event)">
   </div>
@@ -13,6 +17,13 @@ import { inject } from 'vue'
 import GlobalVariables from "@/GlobalVariableHolder";
 
 export default {
+  data() {
+    return {
+      responsemessages: true,
+      failuremessages: true,
+      hiddentransactions: true
+    }
+  },
   mounted() {
     console.log('Mounted')
     this.$nprogress.done(true)
@@ -50,30 +61,29 @@ export default {
       console.log("Parsing data")
 
       GlobalVariables.variables.$jtldata = this.$d3.csvParse(lines, (d) => {
-        return {
-          // year: new Date(+d.Year, 0, 1), // lowercase and convert "Year" to Date
-          // make: d.Make, // lowercase
-          // model: d.Model, // lowercase
-          // length: +d.Length // lowercase and convert "Length" to number
-          timeStamp: +d.timeStamp,    // convert to number
-          elapsed: +d.elapsed,
-          label: d.label,
-          responseCode: +d.responseCode,
-          responseMessage: d.responseMessage,
-          threadName: d.threadName,
-          dataType: d.dataType,
-          success: d.success,
-          failureMessage: d.failureMessage,
-          bytes: +d.bytes,
-          sentBytes: +d.sentBytes,
-          grpThreads: +d.grpThreads,
-          allThreads: +d.allThreads,
-          URL: d.URL,
-          Latency: +d.Latency,
-          IdleTime: +d.IdleTime,
-          Connect: +d.Connect
+        if ((!d.label.startsWith('#')) || (d.label.startsWith('#') && this.hiddentransactions ) ) { // import hidden transaction
+          return {
+            timeStamp: +d.timeStamp,    // convert to number
+            elapsed: +d.elapsed,
+            label: d.label,
+            responseCode: +d.responseCode,
+            responseMessage: (this.responsemessages) ? d.responseMessage : '',
+            threadName: d.threadName,
+            dataType: d.dataType,
+            success: d.success,
+            failureMessage: (this.failuremessages) ? d.failureMessage : '',
+            bytes: +d.bytes,
+            sentBytes: +d.sentBytes,
+            grpThreads: +d.grpThreads,
+            allThreads: +d.allThreads,
+            URL: d.URL,
+            Latency: +d.Latency,
+            IdleTime: +d.IdleTime,
+            Connect: +d.Connect
 
-        };
+          };
+        }
+
       });
       console.log("Parsing done")
       await this.$nprogress.inc(0.7)
