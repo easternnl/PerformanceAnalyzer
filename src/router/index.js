@@ -12,6 +12,7 @@ import JTLFailureResponse from "@/views/JTLFailureResponse.vue";
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
 import JTLFailureResponseChart from "../views/JTLFailureResponseChart.vue";
+import JTLDebugFirstLast from "../views/JTLDebugFirstLast.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -82,6 +83,14 @@ const router = createRouter({
         sidebar: JTLSidebar
       }
     },
+    {
+      path: '/jtldebugfirstlast',
+      name: 'JTLDebugFirstLast',
+      components: {
+        default: JTLDebugFirstLast,
+        sidebar: JTLSidebar
+      }
+    }
   ]
 })
 
