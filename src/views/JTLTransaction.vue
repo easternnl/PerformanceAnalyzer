@@ -98,7 +98,10 @@ export default {
           type: 'date',
           zeroline: true,
           nticks: 20,
-          range: [GlobalVariables.variables.$jtlinfo["min"] - (GlobalVariables.variables.$jtlinfo["duration"] * 0.1), GlobalVariables.variables.$jtlinfo["max"] + (GlobalVariables.variables.$jtlinfo["duration"] * 0.1)],
+          range: [
+              GlobalVariables.variables.$jtlinfo["min"] - (GlobalVariables.variables.$jtlinfo["duration"] * 0.05),
+              GlobalVariables.variables.$jtlinfo["max"] + (GlobalVariables.variables.$jtlinfo["duration"] * 0.05)
+          ],
         },
         yaxis: {
           tickformat: '',
@@ -106,8 +109,17 @@ export default {
           title: 'seconds',
           rangemode: 'tozero'
         },
+        showlegend: true,
         legend: {
+          x: 1,
+          y: 1,
+          xanchor: 'right',
+          bgcolor: '#fffff',
+          borderwidth: 1,
+          bordercolor: '#444',
           orientation: 'v',
+          itemclick: 'toggleothers',
+          itemdoubleclick: 'toggle',
           traceorder: 'normal'
         }
       }
@@ -117,6 +129,9 @@ export default {
         layout: layout,
         config: config
       }
+
+      console.log('Responsetimes')
+      this.$nprogress.inc()
 
       return retourobject
 
@@ -194,7 +209,10 @@ export default {
           type: 'date',
           zeroline: true,
           nticks: 20,
-          range: [GlobalVariables.variables.$jtlinfo["min"] - (GlobalVariables.variables.$jtlinfo["duration"] * 0.1), GlobalVariables.variables.$jtlinfo["max"] + (GlobalVariables.variables.$jtlinfo["duration"] * 0.1)],
+          range: [
+            GlobalVariables.variables.$jtlinfo["min"] - (GlobalVariables.variables.$jtlinfo["duration"] * 0.05),
+            GlobalVariables.variables.$jtlinfo["max"] + (GlobalVariables.variables.$jtlinfo["duration"] * 0.05)
+          ],
         },
         yaxis: {
           tickformat: '',
@@ -204,7 +222,15 @@ export default {
         },
         showlegend: true,
         legend: {
+          x: 1,
+          y: 1,
+          xanchor: 'right',
+          bgcolor: '#fffff',
+          borderwidth: 1,
+          bordercolor: '#444',
           orientation: 'v',
+          itemclick: 'toggleothers',
+          itemdoubleclick: 'toggle',
           traceorder: 'normal'
         }
       }
@@ -214,6 +240,9 @@ export default {
         layout: layout,
         config: config
       }
+
+      console.log('TPS')
+      this.$nprogress.inc()
 
       return retourobject
 
@@ -291,17 +320,28 @@ export default {
           type: 'date',
           zeroline: true,
           nticks: 20,
-          range: [GlobalVariables.variables.$jtlinfo["min"] - (GlobalVariables.variables.$jtlinfo["duration"] * 0.1), GlobalVariables.variables.$jtlinfo["max"] + (GlobalVariables.variables.$jtlinfo["duration"] * 0.1)],
+          range: [
+            GlobalVariables.variables.$jtlinfo["min"] - (GlobalVariables.variables.$jtlinfo["duration"] * 0.05),
+            GlobalVariables.variables.$jtlinfo["max"] + (GlobalVariables.variables.$jtlinfo["duration"] * 0.05)
+          ],
         },
         yaxis: {
           tickformat: '',
           tick0: '0.0',
-          title: 'Errors occuring over time per second',
+          title: 'errors per second',
           rangemode: 'tozero'
         },
         showlegend: true,
         legend: {
+          x: 1,
+          y: 1,
+          xanchor: 'right',
+          bgcolor: '#fffff',
+          borderwidth: 1,
+          bordercolor: '#444',
           orientation: 'v',
+          itemclick: 'toggleothers',
+          itemdoubleclick: 'toggle',
           traceorder: 'normal'
         }
       }
@@ -311,6 +351,10 @@ export default {
         layout: layout,
         config: config
       }
+
+      console.log('errorsovertime')
+
+      this.$nprogress.inc()
 
       return retourobject
 
@@ -341,7 +385,7 @@ export default {
           },
           )
 
-      console.log(Object.keys(reduceddata))
+      // console.log(Object.keys(reduceddata))
 
 
 
@@ -352,10 +396,10 @@ export default {
         return reduceddata[label]
       })
 
-      console.log('x:')
-      console.log(x)
-      console.log('y:')
-      console.log(y)
+      // console.log('x:')
+      // console.log(x)
+      // console.log('y:')
+      // console.log(y)
 
 
       var transactiondetails = {
@@ -375,7 +419,7 @@ export default {
 
         }
       }
-      console.log(transactiondetails)
+      // console.log(transactiondetails)
       data.push (transactiondetails)
 
 
@@ -409,7 +453,15 @@ export default {
         },
         showlegend: true,
         legend: {
+          x: 1,
+          y: 1,
+          xanchor: 'right',
+          bgcolor: '#fffff',
+          borderwidth: 1,
+          bordercolor: '#444',
           orientation: 'v',
+          itemclick: 'toggleothers',
+          itemdoubleclick: 'toggle',
           traceorder: 'normal'
         }
       }
@@ -419,6 +471,10 @@ export default {
         layout: layout,
         config: config
       }
+
+      console.log('responsetimespercentiles')
+
+      this.$nprogress.inc()
 
       return retourobject
 
@@ -443,6 +499,10 @@ export default {
           (a,b) => this.$d3.descending (a.elapsed,
               b.elapsed))
           .slice (0, 10)
+
+      console.log('top10highest')
+
+      this.$nprogress.inc()
 
 
       return reduceddata
@@ -469,6 +529,10 @@ export default {
           .slice (0,
               10)
 
+      console.log('top10lowest')
+
+      this.$nprogress.inc()
+
 
       return reduceddata
 
@@ -485,7 +549,7 @@ export default {
         }
       }, d => d.responseMessage)
 
-      console.log(reduceddata)
+      // console.log(reduceddata)
 
       var data = []
 
@@ -496,6 +560,10 @@ export default {
           Count: Math.round(reduceddata.get(responseMessage)["count"]  ) ,
         })
       })
+
+      console.log('allresponsemessages')
+
+      this.$nprogress.inc()
 
       return data
     },
@@ -518,6 +586,10 @@ export default {
         })
       })
 
+      console.log('allresponsecodes')
+
+      this.$nprogress.inc()
+
       return data
 
 
@@ -531,7 +603,7 @@ export default {
         }
       }, d => d.failureMessage)
 
-      console.log(reduceddata)
+      // console.log(reduceddata)
 
       var data = []
 
@@ -543,14 +615,28 @@ export default {
         })
       })
 
+      console.log('allfailuremessages')
+
+      this.$nprogress.inc()
+
       return data
 
 
     },
   },
   mounted() {
-  }
-  
+    console.log('Mounted')
+    this.$nprogress.done(true);
+  },
+  beforeUpdate() {
+    console.log('beforeUpdate')
+    this.$nprogress.start();
+  },
+  updated() {
+    console.log('Updated')
+    this.$nprogress.done();
+  },
+
 }
 </script>
 
