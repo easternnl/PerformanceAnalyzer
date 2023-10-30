@@ -1,41 +1,77 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory, isNavigationFailure } from 'vue-router'
 // import HomeView from '../views/HomeView.vue'
 //import NProgressView from "@/views/NProgressView.vue";
 //import plotlyExampleView from "@/views/PlotlyExampleView.vue";
 //import GZipExample from '@/views/GZipExample.vue';
 import JTLOpenFile from "@/views/JTLOpenFile.vue";
 import JTLOverview from "@/views/JTLOverview.vue";
-import JTLBaseView from "@/views/JTLBaseView.vue";
 import JTLSidebar from "@/components/JTLSidebar.vue";
 import JTLTransaction from "@/views/JTLTransaction.vue";
 import JTLBigChart from "@/views/JTLBigChart.vue";
+import JTLFailureResponse from "@/views/JTLFailureResponse.vue";
+import NProgress from 'nprogress';
+import 'nprogress/nprogress.css';
+import JTLFailureResponseChart from "../views/JTLFailureResponseChart.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    {
-      path: '/',
-      name: 'home',
-      // component: HomeView
-    },
     {
       path: '/open',
       name: 'open',
       component: JTLOpenFile
     },
     {
-      path: '/jtloverview',
-      name: 'JTLBaseView',
+      path: '/jtloverviewnormal',
+      name: 'JTLOverviewNormal',
       components: {
         default: JTLOverview,
         sidebar: JTLSidebar,
+
+      },
+      props: { default: { view: 'normal' }},
+    },
+    {
+      path: '/jtloverviewhidden',
+      name: 'JTLOverviewHidden',
+      components: {
+        default: JTLOverview,
+        sidebar: JTLSidebar,
+
+      },
+      props: { default: { view: 'hidden' }},
+    },
+    {
+      path: '/jtlbigchartnormal',
+      name: 'JTLBigChartNormal',
+      components: {
+        default: JTLBigChart,
+        sidebar: JTLSidebar
+      },
+      props: { default: { view: 'normal' }},
+    },
+    {
+      path: '/jtlbigcharthidden',
+      name: 'JTLBigChartHidden',
+      components: {
+        default: JTLBigChart,
+        sidebar: JTLSidebar
+      },
+      props: { default: { view: 'hidden' }},
+    },
+    {
+      path: '/jtlfailureresponsechart',
+      name: 'JTLFailureResponseChart',
+      components: {
+        default: JTLFailureResponseChart,
+        sidebar: JTLSidebar
       }
     },
     {
-      path: '/jtlbigchart',
-      name: 'JTLBigChart',
+      path: '/jtlfailureresponse',
+      name: 'JTLFailureResponse',
       components: {
-        default: JTLBigChart,
+        default: JTLFailureResponse,
         sidebar: JTLSidebar
       }
     },
@@ -46,30 +82,38 @@ const router = createRouter({
         sidebar: JTLSidebar
       }
     },
-    {
-      path: '/nprogress',
-      name: 'nprogress',
-  //    component: NProgressView
-    },
-    {
-      path: '/plotlyexampleview',
-      name: 'plotlyexampleview',
-      // component: plotlyExampleView
-    },
-    {
-      path: '/gzipexample',
-      name: 'gzipexample',
-      // component: GZipExample
-    },
-    {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue')
-    }
   ]
+})
+
+router.beforeResolve ((to, from, next) => {
+  // If this isn't an initial page load.
+  console.log('beforeResolve')
+  // NProgress.start()
+
+  next()
+})
+
+router.afterEach(() => {
+  // Complete the animation of the route progress bar.
+  console.log('Aftereach')
+
+  // Any kind of navigation failure
+  if (isNavigationFailure()) {
+    console.log('Navigation failure')
+    NProgress.done()
+  }
+
+})
+
+router.beforeEach(async () => {
+  // Complete the animation of the route progress bar.
+  console.log('beforeEach')
+  await NProgress.start()
+  await new Promise(r => setTimeout(r, 50));  // this makes a little delay to start painting the progress bar
+  console.log('awaited nprogress')
+
+
+  //NProgress.done()
 })
 
 export default router
