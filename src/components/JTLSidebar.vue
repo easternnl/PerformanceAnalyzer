@@ -9,19 +9,19 @@
         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 ">
           <div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-body-tertiary" >
             <div class="list-group list-group-flush scrollarea">
-              <router-link to="/jtloverview" class="list-group-item list-group-item-action py-3 lh-sm border-0">
+              <router-link to="/jtloverviewnormal" class="list-group-item list-group-item-action py-3 lh-sm border-0">
                 <div class="d-flex w-100 align-items-center justify-content-between">
                   <strong class="mb-1">Overview</strong>
                   <small>Tip</small>
                 </div>
-                <div class="col-10 mb-1 small">Table displaying overview with summary of all transactions</div>
+                <div class="col-10 mb-1 small">Table overviewing the summary of the performance test</div>
               </router-link>
-              <router-link to="/jtlbigchart" class="list-group-item list-group-item-action py-3 lh-sm border-0">
+              <router-link to="/jtlbigchartnormal" class="list-group-item list-group-item-action py-3 lh-sm border-0">
                 <div class="d-flex w-100 align-items-center justify-content-between">
                   <strong class="mb-1">All transaction chart</strong>
                   <small class="text-body-secondary">Tip</small>
                 </div>
-                <div class="col-10 mb-1 small">Grand chart with all transaction in one overview</div>
+                <div class="col-10 mb-1 small">Chart with all transaction in one overview</div>
               </router-link>
             </div>
           </div>
@@ -63,6 +63,24 @@
         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 ">
           <div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-body-tertiary" >
             <div class="list-group list-group-flush scrollarea">
+              <router-link class="list-group-item list-group-item-action py-3 lh-sm border-0" to="/jtloverviewhidden">
+                <!-- <a href="#x1" class="list-group-item list-group-item-action py-3 lh-sm border-0"> -->
+                <div class="d-flex w-100 align-items-center justify-content-between">
+                  <strong class="mb-1">Overview of hidden transactions</strong>
+
+                </div>
+                <div class="col-10 mb-1 small">Table overviewing the summary all hidden items in the performance test</div>
+                <!-- </a> -->
+              </router-link>
+              <router-link class="list-group-item list-group-item-action py-3 lh-sm border-bottom-1" to="/jtlbigcharthidden">
+                <!-- <a href="#x1" class="list-group-item list-group-item-action py-3 lh-sm border-0"> -->
+                <div class="d-flex w-100 align-items-center justify-content-between">
+                  <strong class="mb-1">Chart of hidden transactions</strong>
+
+                </div>
+                <div class="col-10 mb-1 small">Chart overviewing the hidden transactions in the performance test</div>
+                <!-- </a> -->
+              </router-link>
               <router-link class="list-group-item list-group-item-action py-3 lh-sm border-0" v-for="(transaction, index) in hiddentransactions" :key="index" :to="'/jtltransaction/' + encodeURIComponent(transaction)">
                 <!-- <a href="#x1" class="list-group-item list-group-item-action py-3 lh-sm border-0"> -->
                 <div class="d-flex w-100 align-items-center justify-content-between">
@@ -82,23 +100,24 @@
       <button class="btn btn-toggle dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#errorsfailures-collapse" aria-expanded="false">
         Errors & Failures
       </button>
-      <div class="collapse" id="errorsfailures-collapse">
+      <div class="collapse show" id="errorsfailures-collapse">
         <div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-body-tertiary" >
           <div class="list-group list-group-flush scrollarea">
-            <a href="#x1" class="list-group-item list-group-item-action py-3 lh-sm border-0">
+            <router-link to="/jtlfailureresponse" class="list-group-item list-group-item-action py-3 lh-sm border-0">
               <div class="d-flex w-100 align-items-center justify-content-between">
-                <strong class="mb-1">All errors</strong>
-
-              </div>
-              <div class="col-10 mb-1 small">All non 200 response codes</div>
-            </a>
-            <router-link to="/jtlallfailuremessages" class="list-group-item list-group-item-action py-3 lh-sm border-0">
-              <div class="d-flex w-100 align-items-center justify-content-between">
-                <strong class="mb-1">Failure Messages</strong>
+                <strong class="mb-1">Errors Overview</strong>
                 <small>Tip</small>
               </div>
-              <div class="col-10 mb-1 small">Table displaying overview with all failure messages</div>
+              <div class="col-10 mb-1 small">Table displaying failureMessages, responseMessages & responseCodes</div>
             </router-link>
+            <router-link to="/jtlfailureresponsechart" class="list-group-item list-group-item-action py-3 lh-sm border-0">
+              <div class="d-flex w-100 align-items-center justify-content-between">
+                <strong class="mb-1">Errors Chart</strong>
+                <small>Tip</small>
+              </div>
+              <div class="col-10 mb-1 small">Chart overviewing the non success and responsecodes in the performance test</div>
+            </router-link>
+
           </div>
 
         </div>
