@@ -8,26 +8,26 @@ export default {
   components: {PlotlyChart},
   computed: {
     transactions: function () {
-
-      console.log('Current view is: ' + this.view)
+      // console.log('Current view is: ' + this.view)
 
       if (this.view == 'normal') {
-        console.log('Returning normal transactions')
+        // console.log('Returning normal transactions')
         return [...new Set(GlobalVariables.variables.$jtldata.map(item => item.label).filter((data) => !data.startsWith('#')))];
       }
       else if (this.view == 'hidden')
       {
-        console.log('Returning hidden transactions')
+        // console.log('Returning hidden transactions')
         return [...new Set(GlobalVariables.variables.$jtldata.map(item => item.label).filter((data) => data.startsWith('#')))];
       }
       else
       {
-        console.log('Returning ALL TRANSACTIONS')
+        // console.log('Returning ALL TRANSACTIONS')
         return [...new Set(GlobalVariables.variables.$jtldata.map(item => item.label))];  // return all
       }
 
     },
     responsetimes: function () {
+      console.time('responsetimes')
 
       var config = {responsive: true}
 
@@ -59,11 +59,11 @@ export default {
           },
            d => d.label, d => parseInt (d.timeStamp / 10000))
 
-      console.log('Rollup map:')
-      console.log(reduceddata)
+      // console.log('Rollup map:')
+      // console.log(reduceddata)
 
       this.transactions.forEach(function (label) {
-        console.log('Adding label ' + label)
+        // console.log('Adding label ' + label)
 
         var x = Array.from (reduceddata.get(label).keys ())
             .map ((item) => {
@@ -148,12 +148,14 @@ export default {
         config: config
       }
 
-      console.log ("retourobject: ")
-      console.log (retourobject)
+      // console.log ("retourobject: ")
+      // console.log (retourobject)
+      console.timeEnd('responsetimes')
       return retourobject
 
     },
     tps: function() {
+      console.time('tps')
       var config = {responsive: true}
 
       var data = []
@@ -248,12 +250,14 @@ export default {
         config: config
       }
 
-      console.log ("retourobject: ")
-      console.log (retourobject)
+      // console.log ("retourobject: ")
+      // console.log (retourobject)
+      console.timeEnd('tps')
       return retourobject
 
     },
     allnonsuccess: function() {
+      console.time('allnonsuccess')
       var config = {responsive: true}
 
       var data = []
@@ -269,11 +273,11 @@ export default {
           },
           d => d.label, d => parseInt (d.timeStamp / 10000))
 
-      console.log('Rollup map:')
-      console.log(reduceddata)
+      // console.log('Rollup map:')
+      // console.log(reduceddata)
 
       Array.from (reduceddata.keys ()).forEach(function(label) {
-        console.log('Adding label ' + label)
+        // console.log('Adding label ' + label)
 
         var x = Array.from (reduceddata.get(label).keys ())
             .map ((item) => {
@@ -356,8 +360,9 @@ export default {
         config: config
       }
 
-      console.log ("retourobject: ")
-      console.log (retourobject)
+      // console.log ("retourobject: ")
+      // console.log (retourobject)
+      console.timeEnd('allnonsuccess')
       return retourobject
 
     }
