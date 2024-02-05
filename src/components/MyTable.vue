@@ -19,7 +19,7 @@ export default {
 
       this.sortreverse = (this.sortkey == sortkey) ? !this.sortreverse : false
 
-      console.log('Setting sortkey to: ' + sortkey + ' reverse: ' + this.sortreverse)
+      // console.log('Setting sortkey to: ' + sortkey + ' reverse: ' + this.sortreverse)
 
       this.sortkey = sortkey
 
@@ -38,13 +38,13 @@ export default {
 
         if (this.sortreverse == true)
         {
-          console.log('Sorting on ' + this.sortkey + ' REVERSE')
+          // console.log('Sorting on ' + this.sortkey + ' REVERSE')
 
           sortedarray = this.$d3.sort (this.tabledata,(a,b) => this.$d3.descending (a[this.sortkey], b[this.sortkey]))
         }
         else
         {
-          console.log('Sorting on ' + this.sortkey + ' ASCENDING')
+          // console.log('Sorting on ' + this.sortkey + ' ASCENDING')
 
 
           sortedarray = this.$d3.sort (this.tabledata,(a,b) => this.$d3.ascending(a[this.sortkey], b[this.sortkey]))
@@ -55,7 +55,6 @@ export default {
       }
       else
       {
-        console.log('Returning default sortedarray')
         return this.tabledata
       }
 
