@@ -12,6 +12,8 @@ export default {
   computed: {
     responsetimes: function () {
 
+      console.time('responsetimes')
+
       var config = {responsive: true}
 
       var data = []
@@ -130,13 +132,13 @@ export default {
         config: config
       }
 
-      console.log('Responsetimes')
-      this.$nprogress.inc()
+      console.timeEnd('responsetimes')
 
       return retourobject
 
     },
     tps: function() {
+      console.time('tps')
 
       var config = {responsive: true}
 
@@ -241,13 +243,13 @@ export default {
         config: config
       }
 
-      console.log('TPS')
-      this.$nprogress.inc()
+      console.timeEnd('tps')
 
       return retourobject
 
     },
     errorsovertime: function() {
+      console.time('errorsovertime')
 
       var config = {responsive: true}
 
@@ -352,15 +354,14 @@ export default {
         config: config
       }
 
-      console.log('errorsovertime')
-
-      this.$nprogress.inc()
+      console.timeEnd('errorsovertime')
 
       return retourobject
 
     },
 
     responsetimespercentiles: function () {
+      console.time('responsetimespercentiles')
       var config = {responsive: true}
 
       var data = []
@@ -472,15 +473,15 @@ export default {
         config: config
       }
 
-      console.log('responsetimespercentiles')
+      console.timeEnd('responsetimespercentiles')
 
-      this.$nprogress.inc()
 
       return retourobject
 
 
     },
     top10highestresponsetimes: function () {
+      console.time('top10highestresponsetimes')
 
       var reduceddata = this.$d3.sort (GlobalVariables.variables.$jtldata.filter ((item) => {
             if (item["label"] == this.transaction) return item.label
@@ -500,15 +501,14 @@ export default {
               b.elapsed))
           .slice (0, 10)
 
-      console.log('top10highest')
-
-      this.$nprogress.inc()
+      console.timeEnd('top10highestresponsetimes')
 
 
       return reduceddata
 
     },
     top10lowestresponsetimes: function () {
+      console.time('top10lowestresponsetimes')
 
       var reduceddata = this.$d3.sort (GlobalVariables.variables.$jtldata.filter ((item) => {
             if (item["label"] == this.transaction) return item.label
@@ -529,10 +529,7 @@ export default {
           .slice (0,
               10)
 
-      console.log('top10lowest')
-
-      this.$nprogress.inc()
-
+      console.timeEnd('top10lowestresponsetimes')
 
       return reduceddata
 
@@ -541,6 +538,7 @@ export default {
       return this.$route.params.transaction
     },
     allresponsemessages: function () {
+      console.time('allresponsemessages')
       var reduceddata = this.$d3.rollup(GlobalVariables.variables.$jtldata.filter ((item) => {
         if (item["label"] == this.transaction) return item.label
       }), (v,e) => {
@@ -561,13 +559,12 @@ export default {
         })
       })
 
-      console.log('allresponsemessages')
-
-      this.$nprogress.inc()
+      console.timeEnd('allresponsemessages')
 
       return data
     },
     allresponsecodes: function () {
+      console.time('allresponsecodes')
       var reduceddata = this.$d3.rollup(GlobalVariables.variables.$jtldata.filter ((item) => {
         if (item["label"] == this.transaction) return item.label
       }), (v,e) => {
@@ -586,15 +583,15 @@ export default {
         })
       })
 
-      console.log('allresponsecodes')
-
-      this.$nprogress.inc()
+      console.timeEnd('allresponsecodes')
 
       return data
 
 
     },
     allfailuremessages: function () {
+      console.time('allfailuremessages')
+
       var reduceddata = this.$d3.rollup(GlobalVariables.variables.$jtldata.filter ((item) => {
         if (item["label"] == this.transaction && item.failureMessage != '') return item.label
       }), (v,e) => {
@@ -615,9 +612,7 @@ export default {
         })
       })
 
-      console.log('allfailuremessages')
-
-      this.$nprogress.inc()
+      console.timeEnd('allfailuremessages')
 
       return data
 
@@ -625,15 +620,12 @@ export default {
     },
   },
   mounted() {
-    console.log('Mounted')
     this.$nprogress.done(true);
   },
   beforeUpdate() {
-    console.log('beforeUpdate')
     this.$nprogress.start();
   },
   updated() {
-    console.log('Updated')
     this.$nprogress.done();
   },
 
@@ -655,12 +647,12 @@ export default {
 
 
   <div class="row">
-    <h1>Top 10 highest</h1>
-    <my-table :tabledata="top10highestresponsetimes"></my-table>
+<!--    <h1>Top 10 highest</h1>-->
+<!--    <my-table :tabledata="top10highestresponsetimes"></my-table>-->
 
 
-    <h1>Top 10 lowest</h1>
-    <my-table :tabledata="top10lowestresponsetimes"></my-table>
+<!--    <h1>Top 10 lowest</h1>-->
+<!--    <my-table :tabledata="top10lowestresponsetimes"></my-table>-->
 
     <h1>All response messages</h1>
     <my-table :tabledata="allresponsemessages"></my-table>
