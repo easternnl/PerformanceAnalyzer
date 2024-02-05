@@ -94,35 +94,25 @@ const router = createRouter({
   ]
 })
 
-router.beforeResolve ((to, from, next) => {
-  // If this isn't an initial page load.
-  console.log('beforeResolve')
-  // NProgress.start()
 
-  next()
-})
 
 router.afterEach(() => {
-  // Complete the animation of the route progress bar.
-  console.log('Aftereach')
+  // Complete the animation of the route progress bar in case of failure
 
   // Any kind of navigation failure
   if (isNavigationFailure()) {
-    console.log('Navigation failure')
+    console.log('Navigation failure occured')
     NProgress.done()
   }
 
 })
 
-router.beforeEach(async () => {
-  // Complete the animation of the route progress bar.
-  console.log('beforeEach')
+router.beforeEach(async (to, from) => {
+  // Start the animation of the route progress bar. It will be stopped in the page it self
+  console.log('NAVIGATING TO ' + to.fullPath)
+
   await NProgress.start()
   await new Promise(r => setTimeout(r, 50));  // this makes a little delay to start painting the progress bar
-  console.log('awaited nprogress')
-
-
-  //NProgress.done()
 })
 
 export default router
