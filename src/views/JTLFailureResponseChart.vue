@@ -6,6 +6,7 @@ export default {
   components: {PlotlyChart},
   computed: {
     allnonsuccess: function() {
+      console.time('allnonsuccess')
       var config = {responsive: true}
 
       var data = []
@@ -21,11 +22,11 @@ export default {
           },
           d => d.label, d => parseInt (d.timeStamp / 10000))
 
-      console.log('Rollup map:')
-      console.log(reduceddata)
+      // console.log('Rollup map:')
+      // console.log(reduceddata)
 
       Array.from (reduceddata.keys ()).forEach(function(label) {
-        console.log('Adding label ' + label)
+        // console.log('Adding label ' + label)
 
         var x = Array.from (reduceddata.get(label).keys ())
             .map ((item) => {
@@ -108,12 +109,12 @@ export default {
         config: config
       }
 
-      console.log ("retourobject: ")
-      console.log (retourobject)
+      console.timeEnd('allnonsuccess')
       return retourobject
 
     },
     non200: function() {
+      console.time('non200')
 
       var config = {responsive: true}
 
@@ -130,11 +131,11 @@ export default {
           },
           d => d.responseCode, d => parseInt(d.timeStamp / 10000))
 
-      console.log('Rollup map:')
-      console.log(reduceddata)
+      // console.log('Rollup map:')
+      // console.log(reduceddata)
 
       Array.from(reduceddata.keys()).forEach(function (label) {
-        console.log('Adding label ' + label)
+        // console.log('Adding label ' + label)
 
         var x = Array.from(reduceddata.get(label).keys())
             .map((item) => {
@@ -217,8 +218,7 @@ export default {
         config: config
       }
 
-      console.log("retourobject: ")
-      console.log(retourobject)
+      console.timeEnd('non200')
       return retourobject
     }
 
