@@ -83,7 +83,7 @@ export default {
 
 
       return [
-        { Name: 'Starttime', Value: this.$moment(GlobalVariables.variables.$jtlinfo["min"]).format('YYYY-MM-DD hh:mm:ss') },
+        { Name: 'Starttime', Value: this.$moment(GlobalVariables.variables.$jtlinfo["min"]).format('YYYY-MM-DD HH:mm:ss') },
         { Name: 'Stoptime', Value: this.$moment(GlobalVariables.variables.$jtlinfo["max"]).format('YYYY-MM-DD HH:mm:ss') },
         { Name: 'Duration', Value: humanizeDuration(GlobalVariables.variables.$jtlinfo["duration"]) },
         // giving the code as value { Name: 'Duration', Value: function() {
