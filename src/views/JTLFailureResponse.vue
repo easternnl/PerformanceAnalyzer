@@ -9,6 +9,7 @@ export default {
   components: {MyTable},
   computed: {
     allfailuremessages: function () {
+      console.time('allfailuremessages')
       var reduceddata = this.$d3.rollup(GlobalVariables.variables.$jtldata.filter ((item) => {
         if (item.failureMessage != '' ) return true
       }), (v,e) => {
@@ -17,7 +18,7 @@ export default {
 
         }
       }, d => d.failureMessage)
-      console.log('Failuremessages: ')
+      // console.log('Failuremessages: ')
       // console.log(reduceddata)
 
       var data = []
@@ -30,11 +31,15 @@ export default {
         })
       })
 
+      console.timeEnd('allfailuremessages')
+
       return data
 
 
     },
     allresponsemessages: function () {
+      console.time('allresponsemessages')
+
       var reduceddata = this.$d3.rollup(GlobalVariables.variables.$jtldata, (v,e) => {
         return {
           count: this.$d3.count(v, e => e.elapsed),
@@ -42,7 +47,7 @@ export default {
         }
       }, d => d.responseMessage)
 
-      console.log(reduceddata)
+      // console.log(reduceddata)
 
       var data = []
 
@@ -54,9 +59,13 @@ export default {
         })
       })
 
+      console.timeEnd('allresponsemessages')
+
       return data
     },
     allresponsecodes: function () {
+      console.time('allresponsecodes')
+
       var reduceddata = this.$d3.rollup(GlobalVariables.variables.$jtldata, (v,e) => {
         return {
           count: this.$d3.count(v, e => e.responseCode),
@@ -73,6 +82,8 @@ export default {
         })
       })
 
+      console.timeEnd('allresponsecodes')
+
       return data
 
 
@@ -83,15 +94,12 @@ export default {
 
   },
   mounted() {
-    console.log('Mounted')
     this.$nprogress.done(true);
   },
   beforeUpdate() {
-    console.log('beforeUpdate')
     this.$nprogress.start();
   },
   updated() {
-    console.log('Updated')
     this.$nprogress.done();
   },
 
