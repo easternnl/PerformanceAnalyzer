@@ -11,47 +11,81 @@ export default {
   computed: {
     transactions: function () {
 
-      console.log('Current view is: ' + this.view)
+      // console.log('Current view is: ' + this.view)
 
       if (this.view == 'normal') {
-        console.log('Returning normal transactions')
+        // console.log('Returning normal transactions')
         return [...new Set(GlobalVariables.variables.$jtldata.map(item => item.label).filter((data) => !data.startsWith('#')))];
       }
       else if (this.view == 'hidden')
       {
-        console.log('Returning hidden transactions')
+        // console.log('Returning hidden transactions')
         return [...new Set(GlobalVariables.variables.$jtldata.map(item => item.label).filter((data) => data.startsWith('#')))];
       }
       else
       {
-        console.log('Returning ALL TRANSACTIONS')
+        // console.log('Returning ALL TRANSACTIONS')
         return [...new Set(GlobalVariables.variables.$jtldata.map(item => item.label))];  // return all
       }
 
     },
     testdata: function() {
 
-      function humanizeDuration(duration, unit, moment) {
-        var durationObj = moment.duration(duration, unit);
-        var durationStringArray = [];
+      function humanizeDuration(duration)  // assume ms
+      {
+        var remainder
+        var days
+        var hours
+        var minutes
+        var seconds
 
+        remainder = duration / 1000
 
-        Object.keys(durationObj._data)
-            .filter((key) => durationObj._data[key] > 0)
-            .forEach((key) => {
-              durationStringArray.push(
-                  moment.duration(durationObj._data[key], key).humanize(false)
-            );
-            });
-        return durationStringArray.reverse().join(', ');
+        days = Math.floor(remainder / 86400);
+        remainder = remainder % 86400
+
+        hours = Math.floor(remainder / 3600)
+        remainder = remainder % 3600
+
+        minutes = Math.floor(remainder / 60)
+        seconds = parseInt(remainder % 60)
+
+        // console.log(days + ' day')
+        // console.log(hours + ' hours')
+        // console.log(minutes + ' minutes')
+        // console.log(seconds + ' seconds')
+
+        var returnstring = ''
+
+        if (days > 0)
+        {
+          returnstring =  returnstring + (returnstring.length > 0 ? ', ' : '') + days + (days > 1 ? ' days' : 'day')
+        }
+
+        if (hours > 0)
+        {
+          returnstring =  returnstring + (returnstring.length > 0 ? ', ' : '') + hours + (hours > 1 ? ' hours' : 'hour')
+        }
+
+        if (minutes > 0)
+        {
+          returnstring = returnstring + (returnstring.length > 0 ? ', ' : '') + minutes + (minutes > 1 ? ' minutes' : 'minute')
+
+        }
+
+        if (seconds > 0)
+        {
+          returnstring =  returnstring + (returnstring.length > 0 ? ', ' : '') + seconds + (seconds > 1 ? ' seconds' : 'second')
+        }
+
+        return returnstring
       }
 
 
       return [
         { Name: 'Starttime', Value: this.$moment(GlobalVariables.variables.$jtlinfo["min"]).format('YYYY-MM-DD hh:mm:ss') },
         { Name: 'Stoptime', Value: this.$moment(GlobalVariables.variables.$jtlinfo["max"]).format('YYYY-MM-DD HH:mm:ss') },
-        // nice but not so precise { Name: 'Duration', Value: humanizeDuration(GlobalVariables.variables.$jtlinfo["duration"], 'ms')
-        { Name: 'Duration', Value: humanizeDuration(GlobalVariables.variables.$jtlinfo["duration"], 'ms', this.$moment) },
+        { Name: 'Duration', Value: humanizeDuration(GlobalVariables.variables.$jtlinfo["duration"]) },
         // giving the code as value { Name: 'Duration', Value: function() {
         //     var durationObj = this.$moment.duration(duration, unit);
         //     var durationStringArray = [];
@@ -68,6 +102,7 @@ export default {
       ]
     },
     alltransactionsoverviewtable: function() {
+      console.time('alltransactionsoverviewtable')
       var reduceddata = this.$d3.rollup(GlobalVariables.variables.$jtldata.filter ((item) => {
             if (this.transactions.includes(item.label)) return item
           }),
@@ -98,7 +133,7 @@ export default {
           },
           d => d.label)
 
-      console.log(reduceddata)
+      // console.log(reduceddata)
 
       var data = []
 
@@ -119,9 +154,13 @@ export default {
         })
       })
 
+      console.timeEnd('alltransactionsoverviewtable')
+
       return data
     },
     allresponsemessages: function () {
+      console.time('allresponsemessages')
+
       var reduceddata = this.$d3.rollup(GlobalVariables.variables.$jtldata.filter ((item) => {
         if (this.transactions.includes(item.label)) return item
       }), (v,e) => {
@@ -131,7 +170,7 @@ export default {
         }
       }, d => d.responseMessage)
 
-      console.log(reduceddata)
+      // console.log(reduceddata)
 
       var data = []
 
@@ -143,9 +182,13 @@ export default {
         })
       })
 
+      console.timeEnd('allresponsemessages')
+
       return data
     },
     allresponsecodes: function () {
+      console.time('allresponsecodes')
+
       var reduceddata = this.$d3.rollup(GlobalVariables.variables.$jtldata.filter ((item) => {
         if (this.transactions.includes(item.label)) return item
       }), (v,e) => {
@@ -164,11 +207,15 @@ export default {
         })
       })
 
+      console.timeEnd('allresponsecodes')
+
       return data
 
 
     },
     allfailuremessages: function () {
+      console.time('allfailuremessages')
+
       var reduceddata = this.$d3.rollup(GlobalVariables.variables.$jtldata.filter ((item) => {
         if (this.transactions.includes(item.label) && item.failureMessage != '' ) return true
       }), (v,e) => {
@@ -177,8 +224,8 @@ export default {
 
         }
       }, d => d.failureMessage)
-      console.log('Failuremessages: ')
-      console.log(reduceddata)
+      // console.log('Failuremessages: ')
+      // console.log(reduceddata)
 
       var data = []
 
@@ -190,6 +237,8 @@ export default {
         })
       })
 
+      console.timeEnd('allfailuremessages')
+
       return data
 
 
@@ -199,14 +248,10 @@ export default {
 
   },
   updated() {
-    console.log('updated')
     this.$nprogress.done(true)
   },
   mounted() {
-    console.log('mounted')
     this.$nprogress.done(true)
-
-    // this.view = 'normal'
   }
 }
 
@@ -222,7 +267,7 @@ export default {
     <my-table :tabledata="allresponsecodes"></my-table>
     <my-table :tabledata="allresponsemessages"></my-table>
     <my-table :tabledata="allfailuremessages"></my-table>
-<!--    <my-table :tabledata="alltransactionsoverviewtable"></my-table>-->
+
   </div>
 </template>
 
