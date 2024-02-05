@@ -6,13 +6,18 @@
       <router-link to="/open"><button type="button" class="btn me-2 text-white">Open</button></router-link>
       <button type="button" class="btn btn-primary text-white">Compare</button>
 
+
     </div>
   </div>
 </template>
 
 <script>
+import GlobalVariables from "@/GlobalVariableHolder";
 export default {
-  name: "NavBar"
+  name: "NavBar",
+
+
+
 }
 </script>
 
