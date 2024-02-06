@@ -3,6 +3,7 @@
 import { inject } from 'vue'
 import GlobalVariables from "@/GlobalVariableHolder";
 import MyTable from "@/components/MyTable.vue";
+import { ref } from 'vue'
 
 export default {
   name: 'JTLOverview',
@@ -10,9 +11,7 @@ export default {
   components: {MyTable},
   computed: {
     transactions: function () {
-
-      // console.log('Current view is: ' + this.view)
-
+      // all transactions found in the $jtldata
       if (this.view == 'normal') {
         // console.log('Returning normal transactions')
         return [...new Set(GlobalVariables.variables.$jtldata.map(item => item.label).filter((data) => !data.startsWith('#')))];
@@ -29,6 +28,7 @@ export default {
       }
 
     },
+
     testdata: function() {
 
       function humanizeDuration(duration)  // assume ms
@@ -104,7 +104,7 @@ export default {
     alltransactionsoverviewtable: function() {
       console.time('alltransactionsoverviewtable')
       var reduceddata = this.$d3.rollup(GlobalVariables.variables.$jtldata.filter ((item) => {
-            if (this.transactions.includes(item.label)) return item
+            if (this.filteredtransactions.includes(item.label)) return item
           }),
           (v,e) => {
             return {
@@ -162,7 +162,7 @@ export default {
       console.time('allresponsemessages')
 
       var reduceddata = this.$d3.rollup(GlobalVariables.variables.$jtldata.filter ((item) => {
-        if (this.transactions.includes(item.label)) return item
+        if (this.filteredtransactions.includes(item.label)) return item
       }), (v,e) => {
         return {
           count: this.$d3.count(v, e => e.elapsed),
@@ -190,7 +190,7 @@ export default {
       console.time('allresponsecodes')
 
       var reduceddata = this.$d3.rollup(GlobalVariables.variables.$jtldata.filter ((item) => {
-        if (this.transactions.includes(item.label)) return item
+        if (this.filteredtransactions.includes(item.label)) return item
       }), (v,e) => {
         return {
           count: this.$d3.count(v, e => e.responseCode),
@@ -217,7 +217,7 @@ export default {
       console.time('allfailuremessages')
 
       var reduceddata = this.$d3.rollup(GlobalVariables.variables.$jtldata.filter ((item) => {
-        if (this.transactions.includes(item.label) && item.failureMessage != '' ) return true
+        if (this.filteredtransactions.includes(item.label) && item.failureMessage != '' ) return true
       }), (v,e) => {
         return {
           count: this.$d3.count(v, e => e.elapsed),
@@ -252,7 +252,14 @@ export default {
   },
   mounted() {
     this.$nprogress.done(true)
-  }
+
+    this.filteredtransactions = this.transactions
+  },
+  data() {
+    return {
+      filteredtransactions: ref([])
+    }
+  },
 }
 
 
@@ -260,6 +267,33 @@ export default {
 
 <template>
   <div class="row">
+
+      <div class="dropdown">
+        <button class="btn dropdown-toggle float-end" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+          Filter transactions
+        </button>
+
+
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+          <li><a class="dropdown-item">Select all</a></li>
+          <li><a class="dropdown-item">Deselect all</a></li>
+          <li><hr class="dropdown-divider"></li>
+          <li v-for="(transaction, index) in transactions" :key="index">
+            <a class="dropdown-item">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" :value="transaction" :id="transaction" v-model="filteredtransactions" checked/>
+                <label class="form-check-label" :for="transaction">{{ transaction }}</label>
+              </div>
+            </a>
+          </li>
+
+        </ul>
+      </div>
+  </div>
+
+  <div class="row">
+<!--    filteredtransactions: {{ filteredtransactions }}-->
+<!--    transactions: {{ transactions }}-->
     <h1>Overview {{ view }}</h1>
 
     <my-table :tabledata="testdata"></my-table>
