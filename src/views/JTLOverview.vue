@@ -4,11 +4,12 @@ import { inject } from 'vue'
 import GlobalVariables from "@/GlobalVariableHolder";
 import MyTable from "@/components/MyTable.vue";
 import { ref } from 'vue'
+import MyFilterDropdown from "../components/MyFilterDropdown.vue";
 
 export default {
   name: 'JTLOverview',
   props: ['view'],
-  components: {MyTable},
+  components: {MyFilterDropdown, MyTable},
   computed: {
     transactions: function () {
       // all transactions found in the $jtldata
@@ -267,28 +268,7 @@ export default {
 
 <template>
   <div class="row">
-
-      <div class="dropdown">
-        <button class="btn dropdown-toggle float-end" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-          Filter transactions
-        </button>
-
-
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-          <li><a class="dropdown-item">Select all</a></li>
-          <li><a class="dropdown-item">Deselect all</a></li>
-          <li><hr class="dropdown-divider"></li>
-          <li v-for="(transaction, index) in transactions" :key="index">
-            <a class="dropdown-item">
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" :value="transaction" :id="transaction" v-model="filteredtransactions" checked/>
-                <label class="form-check-label" :for="transaction">{{ transaction }}</label>
-              </div>
-            </a>
-          </li>
-
-        </ul>
-      </div>
+    <MyFilterDropdown caption="Filter transactions" :selectableitems="transactions" @selecteditems="(a) => filteredtransactions = a"></MyFilterDropdown>
   </div>
 
   <div class="row">
