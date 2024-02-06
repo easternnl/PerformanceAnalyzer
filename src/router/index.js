@@ -5,7 +5,7 @@ import { createRouter, createWebHistory, isNavigationFailure } from 'vue-router'
 //import GZipExample from '@/views/GZipExample.vue';
 import JTLOpenFile from "@/views/JTLOpenFile.vue";
 import JTLOverview from "@/views/JTLOverview.vue";
-import JTLSidebar from "@/components/JTLSidebar.vue";
+import JTLSidebar from "@/components/SidebarTransactions.vue";
 import JTLTransaction from "@/views/JTLTransaction.vue";
 import JTLBigChart from "@/views/JTLBigChart.vue";
 import JTLFailureResponse from "@/views/JTLFailureResponse.vue";
@@ -13,14 +13,27 @@ import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
 import JTLFailureResponseChart from "../views/JTLFailureResponseChart.vue";
 import JTLDebugFirstLast from "../views/JTLDebugFirstLast.vue";
+import SidebarOpen from "../components/SidebarOpen.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
+      path: '/open/upload',
+      name: 'open_upload',
+      components: {
+        default: JTLOpenFile,
+        sidebar: SidebarOpen
+      }
+
+    },
+    {
       path: '/open',
       name: 'open',
-      component: JTLOpenFile
+      components: {
+        default: JTLOpenFile,
+        sidebar: SidebarOpen
+      }
     },
     {
       path: '/jtloverviewnormal',

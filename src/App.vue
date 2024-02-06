@@ -2,7 +2,7 @@
 import { RouterLink, RouterView } from 'vue-router'
 import NavBar from "@/components/NavBar.vue";
 import AppBar from "@/components/AppBar.vue";
-import SideBar from "@/components/JTLSidebar.vue";
+import SideBar from "@/components/SidebarTransactions.vue";
 
 import Dashboard from "@/components/Dashboard.vue";
 

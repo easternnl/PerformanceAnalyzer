@@ -1,11 +1,13 @@
 <script>
 import GlobalVariables from "@/GlobalVariableHolder";
 import PlotlyChart from "@/components/PlotlyChart.vue";
+import {ref} from "vue";
+import MyFilterDropdown from "../components/MyFilterDropdown.vue";
 
 export default {
   name: "JTLBigChart",
   props: ['view'],
-  components: {PlotlyChart},
+  components: {MyFilterDropdown, PlotlyChart},
   computed: {
     transactions: function () {
       // console.log('Current view is: ' + this.view)
@@ -34,7 +36,7 @@ export default {
       var data = []
 
       var reduceddata = this.$d3.rollup (GlobalVariables.variables.$jtldata.filter ((item) => {
-            if (this.transactions.includes(item.label)) return item
+            if (this.filteredtransactions.includes(item.label)) return item
           }),
           (v,e) => {
             return {
@@ -62,7 +64,7 @@ export default {
       // console.log('Rollup map:')
       // console.log(reduceddata)
 
-      this.transactions.forEach(function (label) {
+      this.filteredtransactions.forEach(function (label) {
         // console.log('Adding label ' + label)
 
         var x = Array.from (reduceddata.get(label).keys ())
@@ -161,7 +163,7 @@ export default {
       var data = []
 
       var reduceddata = this.$d3.rollup (GlobalVariables.variables.$jtldata.filter ((item) => {
-            if (this.transactions.includes(item.label)) return item
+            if (this.filteredtransactions.includes(item.label)) return item
         }),
         (v,e) => {
           return {
@@ -263,7 +265,7 @@ export default {
       var data = []
 
       var reduceddata = this.$d3.rollup (GlobalVariables.variables.$jtldata.filter ((item) => {
-            if (this.transactions.includes(item.label) && item.success == 'false') return item
+            if (this.filteredtransactions.includes(item.label) && item.success == 'false') return item
           }),
           (v,e) => {
             return {
@@ -373,12 +375,23 @@ export default {
   },
   mounted() {
     this.$nprogress.done(true)
+
+    this.filteredtransactions = this.transactions
+  },
+  data() {
+    return {
+      filteredtransactions: ref([])
+    }
   }
 }
 
 </script>
 
 <template>
+  <div class="row">
+    <MyFilterDropdown caption="Filter transactions" :selectableitems="transactions" @selecteditems="(a) => filteredtransactions = a"></MyFilterDropdown>
+  </div>
+
   <div class="row">
     <h1>Overview chart of all transactions</h1>
     <PlotlyChart :chartdetails="responsetimes"></PlotlyChart>
