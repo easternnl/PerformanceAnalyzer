@@ -50,33 +50,27 @@ export default {
 
 
     <ul class="dropdown-menu" v-bind:aria-labelledby="dropdownid">
-      <form>
-      <li>
-        <a class="dropdown-item data-keepOpenOnClick">
-          <button type="button" class="btn btn-light" @click="this.selecteditems = this.selectableitems; this.$emit('selecteditems', this.selecteditems)" data-keepOpenOnClick>Select all</button>
-        </a>
-      </li>
-      <li>
-        <a class="dropdown-item" data-keepOpenOnClick>
-          <button type="button" class="btn btn-light" @click="this.selecteditems = ''; this.$emit('selecteditems', this.selecteditems)">Deselect all</button>
-        </a>
-      </li>
-      <li><hr class="dropdown-divider"></li>
-      <li v-for="(selectableitem, index) in selectableitems" :key="index">
-        <a class="dropdown-item">
+
+        <button type="button" data-bs-auto-close="outside" class="dropdown-item" @click="this.selecteditems = this.selectableitems; this.$emit('selecteditems', this.selecteditems)" data-keepOpenOnClick>Select all</button>
+
+      <button type="button" class="dropdown-item" @click="this.selecteditems = []; this.$emit('selecteditems', this.selecteditems)">Deselect all</button>
+
+      <hr class="dropdown-divider">
+
+      <a class="dropdown-item" v-for="(selectableitem, index) in selectableitems" :key="index">
           <div class="form-check">
             <input class="form-check-input" type="checkbox" :value="selectableitem" :id="selectableitem" v-model="selecteditems"  checked @change="this.$emit('selecteditems', this.selecteditems)" />
             <label class="form-check-label" :for="selectableitem">{{ selectableitem }}</label>
           </div>
-        </a>
-      </li>
-      </form>
+
+      </a>
+
     </ul>
   </div>
 
-  <p>
-    Selected items are: {{ selecteditems }}
-  </p>
+<!--  <p>-->
+<!--    Selected items are: {{ selecteditems }}-->
+<!--  </p>-->
 
 </template>
 
