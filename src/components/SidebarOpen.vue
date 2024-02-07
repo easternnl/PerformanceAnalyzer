@@ -8,7 +8,7 @@ export default {
   <ul class="list-unstyled">
     <li class="mb-1">
       <button class="btn btn-toggle dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#overview-collapse" aria-expanded="false">
-        Open a file from
+        Open a JTL file from
       </button>
       <div class="collapse show" id="overview-collapse">
         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 ">
@@ -19,16 +19,23 @@ export default {
                   <strong class="mb-1">Jenkins</strong>
                   <small></small>
                 </div>
-                <div class="col-10 mb-1 small">Download a file directly from Jenkins</div>
+                <div class="col-10 mb-1 small">Download a file directly from a Jenkins build</div>
               </router-link>
               <router-link to="/open/upload" class="list-group-item list-group-item-action py-3 lh-sm border-0">
                 <div class="d-flex w-100 align-items-center justify-content-between">
-                  <strong class="mb-1">Upload a file</strong>
+                  <strong class="mb-1">Upload file</strong>
                   <small class="text-body-secondary"></small>
                 </div>
                 <div class="col-10 mb-1 small">Upload a file from your computer</div>
               </router-link>
-              <router-link to="/open/webserver" class="list-group-item list-group-item-action py-3 lh-sm border-0">
+               <router-link to="/open/text" class="list-group-item list-group-item-action py-3 lh-sm border-0">
+                <div class="d-flex w-100 align-items-center justify-content-between">
+                  <strong class="mb-1">Upload text</strong>
+                  <small class="text-body-secondary"></small>
+                </div>
+                <div class="col-10 mb-1 small">Upload a JTL as text</div>
+              </router-link>
+              <router-link to="/open/web" class="list-group-item list-group-item-action py-3 lh-sm border-0">
                 <div class="d-flex w-100 align-items-center justify-content-between">
                   <strong class="mb-1">Webserver</strong>
                   <small class="text-body-secondary"></small>
