@@ -9,11 +9,14 @@ import JTLSidebar from "@/components/SidebarTransactions.vue";
 import JTLTransaction from "@/views/JTLTransaction.vue";
 import JTLBigChart from "@/views/JTLBigChart.vue";
 import JTLFailureResponse from "@/views/JTLFailureResponse.vue";
+import JTLOpenWeb from "../views/JTLOpenWeb.vue";
+
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
 import JTLFailureResponseChart from "../views/JTLFailureResponseChart.vue";
 import JTLDebugFirstLast from "../views/JTLDebugFirstLast.vue";
 import SidebarOpen from "../components/SidebarOpen.vue";
+import JTLOpenText from "../views/JTLOpenText.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -26,6 +29,24 @@ const router = createRouter({
         sidebar: SidebarOpen
       }
 
+    },
+    {
+      path: '/open/web',
+      name: 'open_web',
+      components: {
+        default: JTLOpenWeb,
+
+        sidebar: SidebarOpen
+      }
+    },
+    {
+      path: '/open/text',
+      name: 'open_text',
+      components: {
+        default: JTLOpenText,
+
+        sidebar: SidebarOpen
+      }
     },
     {
       path: '/open',
