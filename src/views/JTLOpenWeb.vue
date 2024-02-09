@@ -25,9 +25,11 @@ export default {
 
       }).catch((response) => {
         console.error("Could not download: " + this.url, response);
+
+
       });
 
-      // call the function in the child to process the file
+
 
 
     },
@@ -49,6 +51,8 @@ export default {
       <button type="submit" class="btn btn-primary mb-3" @click="download()">Download</button>
     </div>
   </div>
+
+
 
   <importjtl @interface="jtlimportinterface"></importjtl>
 </template>
