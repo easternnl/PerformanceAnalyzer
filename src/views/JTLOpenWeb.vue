@@ -17,7 +17,7 @@ export default {
     download() {
       // download the file from URL
 
-      axios.get(this.url, {responseType: 'text'}).then((response) => {
+      axios.get(this.url, {responseType: 'text', withCredentials: true}).then((response) => {
 
         // Let the user save the file.
 
