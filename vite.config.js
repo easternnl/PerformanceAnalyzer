@@ -6,6 +6,7 @@ import basicSsl from '@vitejs/plugin-basic-ssl'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: './', // Path relative to project root
   plugins: [
     vue(),
     basicSsl()
