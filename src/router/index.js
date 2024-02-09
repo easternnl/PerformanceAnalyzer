@@ -17,6 +17,8 @@ import JTLFailureResponseChart from "../views/JTLFailureResponseChart.vue";
 import JTLDebugFirstLast from "../views/JTLDebugFirstLast.vue";
 import SidebarOpen from "../components/SidebarOpen.vue";
 import JTLOpenText from "../views/JTLOpenText.vue";
+import JTLOpenUpload from "../views/JTLOpenUpload.vue";
+import JTLOpenJenkins from "@/views/JTLOpenJenkins.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -25,7 +27,7 @@ const router = createRouter({
       path: '/open/upload',
       name: 'open_upload',
       components: {
-        default: JTLOpenFile,
+        default: JTLOpenUpload,
         sidebar: SidebarOpen
       }
 
@@ -35,6 +37,15 @@ const router = createRouter({
       name: 'open_web',
       components: {
         default: JTLOpenWeb,
+
+        sidebar: SidebarOpen
+      }
+    },
+    {
+      path: '/open/jenkins',
+      name: 'open_jenkins',
+      components: {
+        default: JTLOpenJenkins,
 
         sidebar: SidebarOpen
       }
